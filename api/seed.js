@@ -1130,15 +1130,15 @@ var insert_attendance_detail = [
 ];
 //[from_id, to_id, title, content, category, type, read, replied]
 var insert_feeback = [
-    [null, null, 'Phòng học kém chất lượng', 'Máy lạnh nóng quớ',                         2, 3, false, false],//1
-    [171,     1, 'Thầy dạy quá nhanh',       'Thầy có thể dạy chậm lại cho em dễ hiểu ?', 1,1, false, false],//2
-    [171,  null, 'Ổ điện hỏng',              'Ổ điện dãy giữa phòng I44 bị hỏng',         2,1, true, true],//3
-    [171,  null, 'Lớp 13CLC hư',             'Lớp 13CLC nói chuyện quá nhiều trong giờ',  1,1, true, true],//4
-    [null, null, 'Phòng học chất lượng thấp','Khong co may lanh',                         2,3, false, false],//5
-    [171,     1, 'Thầy dạy quá khó hiểu',    'Thầy có thể dạy chậm lại cho em dễ hiểu ?',  1,1, false, false],//6
-    [171,     2, 'Cô hay đến lớp trễ',       'Tóc mới của cô làm em khó tập trung quá!',  1,1, false, false],//7
-    [1,    null, 'Ổ điện không mở được',     'Cô hãy fix giúp tụi em',                    2,1, true, true],//8
-    [1,    null, 'Lớp 13CLC cúp học cả lớp', 'Lớp 13CLC nói chuyện quá ',                 1,1, true, true]//9
+    [null, null, 'Phòng học kém chất lượng', 'Máy lạnh nóng quớ', 2, 3, false, false],//1
+    [171, 1, 'Thầy dạy quá nhanh', 'Thầy có thể dạy chậm lại cho em dễ hiểu ?', 1, 1, false, false],//2
+    [171, null, 'Ổ điện hỏng', 'Ổ điện dãy giữa phòng I44 bị hỏng', 2, 1, true, true],//3
+    [171, null, 'Lớp 13CLC hư', 'Lớp 13CLC nói chuyện quá nhiều trong giờ', 1, 1, true, true],//4
+    [null, null, 'Phòng học chất lượng thấp', 'Khong co may lanh', 2, 3, false, false],//5
+    [171, 1, 'Thầy dạy quá khó hiểu', 'Thầy có thể dạy chậm lại cho em dễ hiểu ?', 1, 1, false, false],//6
+    [171, 2, 'Cô hay đến lớp trễ', 'Tóc mới của cô làm em khó tập trung quá!', 1, 1, false, false],//7
+    [1, null, 'Ổ điện không mở được', 'Cô hãy fix giúp tụi em', 2, 1, true, true],//8
+    [1, null, 'Lớp 13CLC cúp học cả lớp', 'Lớp 13CLC nói chuyện quá ', 1, 1, true, true]//9
 ];
 //[title, class_has_course_id, created_by,is_template]
 var insert_quiz = [
@@ -1146,9 +1146,9 @@ var insert_quiz = [
 ];
 //[quiz_id, text, option_a, option_b, option_c, option_d, correct_option, timer]
 var insert_quiz_question = [
-    [1, `Kiểu nào có kích thước lớn nhất`,'int','char','long','double','double',10], //1
-    [1, `Dạng hậu tố của biểu thức 9 - (5 + 2) là ?`,'95-+2','95-2+','952+-','95+2-','952+-',10], //2
-    [1, `Giả sử a và b là hai số thực. Biểu thức nào dưới đây là không được phép theo cú pháp của ngôn ngữ lập trình C?`,'ab','a-=b','a>>=b','a*=b','a>>=b',10],//3
+    [1, `Kiểu nào có kích thước lớn nhất`, 'int', 'char', 'long', 'double', 'double', 10], //1
+    [1, `Dạng hậu tố của biểu thức 9 - (5 + 2) là ?`, '95-+2', '95-2+', '952+-', '95+2-', '952+-', 10], //2
+    [1, `Giả sử a và b là hai số thực. Biểu thức nào dưới đây là không được phép theo cú pháp của ngôn ngữ lập trình C?`, 'ab', 'a-=b', 'a>>=b', 'a*=b', 'a>>=b', 10],//3
 ];
 //[quiz_question_id, selected_option, answered_by]
 var insert_quiz_answer = [
@@ -1161,21 +1161,21 @@ var insert_quiz_answer = [
 ];
 //[to_id, message, object_id, type]
 var insert_notifications = [
-    [null,1, `Đinh Bá Tiến sent you a feedback`,5,_global.notification_type.sent_feedback], //1
+    [null, 1, `Đinh Bá Tiến sent you a feedback`, 5, _global.notification_type.sent_feedback], //1
 ];
 
-var seeding_postgres = function(res) {
-    pool_postgres.connect(function(error, connection, done) {
+var seeding_postgres = function (res) {
+    pool_postgres.connect(function (error, connection, done) {
         async.series([
             //Start transaction
-            function(callback) {
+            function (callback) {
                 connection.query('BEGIN', (error) => {
-                    if(error) callback(error);
+                    if (error) callback(error);
                     else callback();
                 });
             },
-            function(callback) {
-                connection.query(format('INSERT INTO roles (name) VALUES %L', insert_roles), function(error, results, fields) {
+            function (callback) {
+                connection.query(format('INSERT INTO roles (name) VALUES %L', insert_roles), function (error, results, fields) {
                     if (error) {
                         callback(error);
                     } else {
@@ -1183,8 +1183,8 @@ var seeding_postgres = function(res) {
                     }
                 });
             },
-            function(callback) {
-                connection.query(format('INSERT INTO semesters (name,start_date,end_date,vacation_time) VALUES %L', insert_semesters), function(error, results, fields) {
+            function (callback) {
+                connection.query(format('INSERT INTO semesters (name,start_date,end_date,vacation_time) VALUES %L', insert_semesters), function (error, results, fields) {
                     if (error) {
                         callback(error);
                     } else {
@@ -1192,8 +1192,8 @@ var seeding_postgres = function(res) {
                     }
                 });
             },
-            function(callback) {
-                connection.query(format('INSERT INTO programs (name,code) VALUES %L', insert_programs), function(error, results, fields) {
+            function (callback) {
+                connection.query(format('INSERT INTO programs (name,code) VALUES %L', insert_programs), function (error, results, fields) {
                     if (error) {
                         callback(error);
                     } else {
@@ -1201,8 +1201,8 @@ var seeding_postgres = function(res) {
                     }
                 });
             },
-            function(callback) {
-                connection.query(format('INSERT INTO classes (name,email,program_id) VALUES %L', insert_classes), function(error, results, fields) {
+            function (callback) {
+                connection.query(format('INSERT INTO classes (name,email,program_id) VALUES %L', insert_classes), function (error, results, fields) {
                     if (error) {
                         callback(error);
                     } else {
@@ -1210,8 +1210,8 @@ var seeding_postgres = function(res) {
                     }
                 });
             },
-            function(callback) {
-                connection.query(format('INSERT INTO courses (code,name,semester_id,program_id,office_hour,note) VALUES %L', insert_courses), function(error, results, fields) {
+            function (callback) {
+                connection.query(format('INSERT INTO courses (code,name,semester_id,program_id,office_hour,note) VALUES %L', insert_courses), function (error, results, fields) {
                     if (error) {
                         callback(error);
                     } else {
@@ -1219,8 +1219,8 @@ var seeding_postgres = function(res) {
                     }
                 });
             },
-            function(callback) {
-                connection.query(format('INSERT INTO class_has_course (class_id,course_id,schedules) VALUES %L', insert_class_has_course), function(error, results, fields) {
+            function (callback) {
+                connection.query(format('INSERT INTO class_has_course (class_id,course_id,schedules) VALUES %L', insert_class_has_course), function (error, results, fields) {
                     if (error) {
                         callback(error);
                     } else {
@@ -1228,8 +1228,8 @@ var seeding_postgres = function(res) {
                     }
                 });
             },
-            function(callback) {
-                connection.query(format('INSERT INTO users (first_name,last_name,email,phone,password,role_id) VALUES %L', insert_users), function(error, results, fields) {
+            function (callback) {
+                connection.query(format('INSERT INTO users (first_name,last_name,email,phone,password,role_id) VALUES %L', insert_users), function (error, results, fields) {
                     if (error) {
                         callback(error);
                     } else {
@@ -1237,8 +1237,8 @@ var seeding_postgres = function(res) {
                     }
                 });
             },
-            function(callback) {
-                connection.query(format('INSERT INTO teacher_teach_course (teacher_id,course_id,teacher_role) VALUES %L', insert_teacher_teach_course), function(error, results, fields) {
+            function (callback) {
+                connection.query(format('INSERT INTO teacher_teach_course (teacher_id,course_id,teacher_role) VALUES %L', insert_teacher_teach_course), function (error, results, fields) {
                     if (error) {
                         callback(error);
                     } else {
@@ -1246,8 +1246,8 @@ var seeding_postgres = function(res) {
                     }
                 });
             },
-            function(callback) {
-                connection.query(format('INSERT INTO students (id,stud_id,class_id) VALUES %L', insert_students), function(error, results, fields) {
+            function (callback) {
+                connection.query(format('INSERT INTO students (id,stud_id,class_id) VALUES %L', insert_students), function (error, results, fields) {
                     if (error) {
                         callback(error);
                     } else {
@@ -1255,8 +1255,8 @@ var seeding_postgres = function(res) {
                     }
                 });
             },
-            function(callback) {
-                connection.query(format('INSERT INTO student_enroll_course (class_has_course_id,student_id) VALUES %L', insert_student_enroll_course), function(error, results, fields) {
+            function (callback) {
+                connection.query(format('INSERT INTO student_enroll_course (class_has_course_id,student_id) VALUES %L', insert_student_enroll_course), function (error, results, fields) {
                     if (error) {
                         callback(error);
                     } else {
@@ -1264,8 +1264,8 @@ var seeding_postgres = function(res) {
                     }
                 });
             },
-            function(callback) {
-                connection.query(format('INSERT INTO absence_requests (student_id, reason, start_date, end_date) VALUES %L', insert_absence_requests), function(error, results, fields) {
+            function (callback) {
+                connection.query(format('INSERT INTO absence_requests (student_id, reason, start_date, end_date) VALUES %L', insert_absence_requests), function (error, results, fields) {
                     if (error) {
                         callback(error);
                     } else {
@@ -1273,8 +1273,8 @@ var seeding_postgres = function(res) {
                     }
                 });
             },
-            function(callback) {
-                connection.query(format('INSERT INTO attendance (course_id,class_id,closed) VALUES %L', insert_attendance), function(error, results, fields) {
+            function (callback) {
+                connection.query(format('INSERT INTO attendance (course_id,class_id,closed) VALUES %L', insert_attendance), function (error, results, fields) {
                     if (error) {
                         callback(error);
                     } else {
@@ -1282,8 +1282,8 @@ var seeding_postgres = function(res) {
                     }
                 });
             },
-            function(callback) {
-                connection.query(format('INSERT INTO attendance_detail (attendance_id, student_id, attendance_type) VALUES %L', insert_attendance_detail), function(error, results, fields) {
+            function (callback) {
+                connection.query(format('INSERT INTO attendance_detail (attendance_id, student_id, attendance_type) VALUES %L', insert_attendance_detail), function (error, results, fields) {
                     if (error) {
                         callback(error);
                     } else {
@@ -1291,8 +1291,8 @@ var seeding_postgres = function(res) {
                     }
                 });
             },
-            function(callback) {
-                connection.query(format('INSERT INTO feedbacks (from_id, to_id, title, content, category, type, read, replied) VALUES %L', insert_feeback), function(error, results, fields) {
+            function (callback) {
+                connection.query(format('INSERT INTO feedbacks (from_id, to_id, title, content, category, type, read, replied) VALUES %L', insert_feeback), function (error, results, fields) {
                     if (error) {
                         callback(error);
                     } else {
@@ -1300,8 +1300,8 @@ var seeding_postgres = function(res) {
                     }
                 });
             },
-            function(callback) {
-                connection.query(format('INSERT INTO quiz (title, class_has_course_id, created_by, is_template) VALUES %L', insert_quiz), function(error, results, fields) {
+            function (callback) {
+                connection.query(format('INSERT INTO quiz (title, class_has_course_id, created_by, is_template) VALUES %L', insert_quiz), function (error, results, fields) {
                     if (error) {
                         callback(error);
                     } else {
@@ -1309,8 +1309,8 @@ var seeding_postgres = function(res) {
                     }
                 });
             },
-            function(callback) {
-                connection.query(format('INSERT INTO quiz_questions (quiz_id, text, option_a, option_b, option_c, option_d, correct_option, timer) VALUES %L', insert_quiz_question), function(error, results, fields) {
+            function (callback) {
+                connection.query(format('INSERT INTO quiz_questions (quiz_id, text, option_a, option_b, option_c, option_d, correct_option, timer) VALUES %L', insert_quiz_question), function (error, results, fields) {
                     if (error) {
                         callback(error);
                     } else {
@@ -1318,8 +1318,8 @@ var seeding_postgres = function(res) {
                     }
                 });
             },
-            function(callback) {
-                connection.query(format('INSERT INTO quiz_answers (quiz_question_id, selected_option ,answered_by) VALUES %L', insert_quiz_answer), function(error, results, fields) {
+            function (callback) {
+                connection.query(format('INSERT INTO quiz_answers (quiz_question_id, selected_option ,answered_by) VALUES %L', insert_quiz_answer), function (error, results, fields) {
                     if (error) {
                         callback(error);
                     } else {
@@ -1327,8 +1327,8 @@ var seeding_postgres = function(res) {
                     }
                 });
             },
-            function(callback) {
-                connection.query(format('INSERT INTO notifications (to_id,from_id, message ,object_id, type) VALUES %L', insert_notifications), function(error, results, fields) {
+            function (callback) {
+                connection.query(format('INSERT INTO notifications (to_id,from_id, message ,object_id, type) VALUES %L', insert_notifications), function (error, results, fields) {
                     if (error) {
                         callback(error);
                     } else {
@@ -1337,13 +1337,13 @@ var seeding_postgres = function(res) {
                 });
             },
             //Commit transaction
-            function(callback) {
+            function (callback) {
                 connection.query('COMMIT', (error) => {
                     if (error) callback(error);
                     else callback();
                 });
             },
-        ], function(error) {
+        ], function (error) {
             if (error) {
                 _global.sendError(res, error.message);
                 connection.query('ROLLBACK', (error) => {
@@ -1363,18 +1363,18 @@ var seeding_postgres = function(res) {
 var insert_admin = [
     ['Park Hang', 'Seo', 'parkhangseo@fit.hcmus.edu.vn', '01228718705', bcrypt.hashSync('korea', 10), 4], //1
 ];
-var seeding_admin = function(res) {
-    pool_postgres.connect(function(error, connection, done) {
+var seeding_admin = function (res) {
+    pool_postgres.connect(function (error, connection, done) {
         async.series([
             //Start transaction
-            function(callback) {
+            function (callback) {
                 connection.query('BEGIN', (error) => {
-                    if(error) callback(error);
+                    if (error) callback(error);
                     else callback();
                 });
             },
-            function(callback) {
-                connection.query(format('INSERT INTO roles (name) VALUES %L', insert_roles), function(error, results, fields) {
+            function (callback) {
+                connection.query(format('INSERT INTO roles (name) VALUES %L', insert_roles), function (error, results, fields) {
                     if (error) {
                         callback(error);
                     } else {
@@ -1382,8 +1382,8 @@ var seeding_admin = function(res) {
                     }
                 });
             },
-            function(callback) {
-                connection.query(format('INSERT INTO users (first_name,last_name,email,phone,password,role_id) VALUES %L', insert_admin), function(error, results, fields) {
+            function (callback) {
+                connection.query(format('INSERT INTO users (first_name,last_name,email,phone,password,role_id) VALUES %L', insert_admin), function (error, results, fields) {
                     if (error) {
                         callback(error);
                     } else {
@@ -1392,13 +1392,13 @@ var seeding_admin = function(res) {
                 });
             },
             //Commit transaction
-            function(callback) {
+            function (callback) {
                 connection.query('COMMIT', (error) => {
                     if (error) callback(error);
                     else callback();
                 });
             },
-        ], function(error) {
+        ], function (error) {
             if (error) {
                 _global.sendError(res, error.message);
                 connection.query('ROLLBACK', (error) => {
@@ -1414,11 +1414,11 @@ var seeding_admin = function(res) {
         });
     });
 }
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
     //seeding_mysql(res);
     seeding_postgres(res);
 });
-router.get('/admin', function(req, res, next) {
+router.get('/admin', function (req, res, next) {
     //seeding_mysql(res);
     seeding_admin(res);
 });
