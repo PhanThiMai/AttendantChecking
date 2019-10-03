@@ -16,7 +16,7 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {HttpClientModule, HttpClient} from '@angular/common/http';
 
 const ROUTES = [
-    { path: '', loadChildren: 'app/layout/layout.module#LayoutModule' }, 
+    { path: '', loadChildren: () => import('app/layout/layout.module').then(m => m.LayoutModule) }, 
     { path: 'login', component: LoginComponent},
     { path: 'register', component: RegisterComponent},
     { path: 'logout', component: LogoutComponent},
