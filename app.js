@@ -16,7 +16,7 @@ var swaggerDefinition = {
     version: '1.0.0',
     description: 'Demonstrating how to use DiemDanh API with your application',
   },
-  host: 'https://parkhangseo.herokuapp.com',
+  host: 'https://pattendantchecking1612369.herokuapp.com',
   basePath: '/',
 };
 
@@ -39,7 +39,7 @@ app.use(cors()); //normal CORS
 app.use(express.static(path.join(__dirname, 'swagger')));
 app.use(compression());
 
-app.get('/api/swagger.json', function(req, res) {
+app.get('/api/swagger.json', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.send(swaggerSpec);
 });
@@ -48,25 +48,25 @@ app.use('/authenticate', require('./api/authenticate'));
 app.use('/seed', require('./api/seed'));
 app.use('/api', require('./api/api'));
 
- const forceSSL = function() {
-   return function (req, res, next) {
-     if (req.headers['x-forwarded-proto'] !== 'https') {
-       return res.redirect(
-      ['https://', req.get('Host'), req.url].join('')
+const forceSSL = function () {
+  return function (req, res, next) {
+    if (req.headers['x-forwarded-proto'] !== 'https') {
+      return res.redirect(
+        ['https://', req.get('Host'), req.url].join('')
       );
-     }
-     next();
-   }
- }
+    }
+    next();
+  }
+}
 
- app.use(forceSSL());
+app.use(forceSSL());
 
 
 //Xác định trang "public" cho client
 app.use(express.static(path.join(__dirname, 'dist')));
 
-app.use('*', function(req, res, next) {
-   res.sendFile(path.join(__dirname,'/dist/index.html'));
+app.use('*', function (req, res, next) {
+  res.sendFile(path.join(__dirname, '/dist/index.html'));
 });
 
 module.exports = app;

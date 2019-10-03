@@ -6,7 +6,7 @@
             "type": "chrome",
             "request": "attach",
             "port": 9222,
-            "url": "https://parkhangseo.herokuapp.com/login",
+            "url": "https://attendantchecking1612369.herokuapp.com/login",
             "sourceMaps": true,
             "trace": "verbose",
             "webRoot": "${workspaceRoot}/src/app",
@@ -16,11 +16,11 @@
             "type": "chrome",
             "request": "launch",
             "port": 9222,
-            "url": "https://parkhangseo.herokuapp.com/login",
+            "url": "https://attendantchecking1612369.herokuapp.com/login",
             "sourceMaps": true,
             "trace": "verbose",
             "webRoot": "${workspaceRoot}/src/app",
             "userDataDir": "${workspaceRoot}/out/chrome"
         }
-]
+    ]
 }

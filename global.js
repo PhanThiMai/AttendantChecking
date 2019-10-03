@@ -9,11 +9,11 @@ module.exports = {
         database: 'qldd'
     },
     db_postgres: {
-        host: 'ec2-174-129-22-84.compute-1.amazonaws.com',
-        user: 'ilquyrkqqkgijp',
-        password: 'a4aead1eaa04bdcfa2196aae911c28177cf1b17b40b2d5092d519992e35cd15b',
-        port:'5432',
-        database: 'd91ppiouvmbhkg'
+        host: 'ec2-54-235-246-201.compute-1.amazonaws.com',
+        user: 'ueylttbshncdyd',
+        password: '842cc3614b69f55f103234259f6565eb438633b6528beb9d81b2b25bdbcaa1b2',
+        port: '5432',
+        database: 'd1keij6q22941r'
     },
     //db_postgres: {
     //    host: 'localhost',
@@ -22,7 +22,7 @@ module.exports = {
     //    port:'5432',
     //    database: 'qldd'
     //},
-    host: 'https://parkhangseo.herokuapp.com',
+    host: 'https://attendantchecking1612369.herokuapp.com',
     email_setting: {
         host: 'smtp.office365.com', // Office 365 server
         port: 587, // secure SMTP
@@ -35,16 +35,16 @@ module.exports = {
             ciphers: 'SSLv3'
         }
     },
-    notification_type:{
-        send_feedback:0,
-        reply_feedback:1,
-        send_absence_request:2,
-        accept_absence_request:3,
-        reject_absence_request:4,
-        open_attendance:5,
-        request_to_be_check_attendance:6,
+    notification_type: {
+        send_feedback: 0,
+        reply_feedback: 1,
+        send_absence_request: 2,
+        accept_absence_request: 3,
+        reject_absence_request: 4,
+        open_attendance: 5,
+        request_to_be_check_attendance: 6,
     },
-    attendance_type:{
+    attendance_type: {
         permited_absent: -1,
         absent: 0,
         checklist: 1,
@@ -52,19 +52,19 @@ module.exports = {
         quiz: 3,
         face: 4,
     },
-    quiz_type:{
+    quiz_type: {
         academic: 0,
         miscellaneous: 1,
     },
-    attendance_status:{
+    attendance_status: {
         normal: 0,
         exemption: 1,
     },
-    feedback_status:{
+    feedback_status: {
         pending: 0,
         replied: 1,
     },
-    feedback_categories:{
+    feedback_categories: {
         all: 0,
         academic: 1,
         facility: 2,
@@ -80,7 +80,7 @@ module.exports = {
         accepted: 1,
         rejected: 2
     },
-    student_interaction_type:{
+    student_interaction_type: {
         answer_question: 0,
         discuss: 1,
         present: 2
@@ -97,11 +97,11 @@ module.exports = {
 
     api_ver: 1,
 
-    sendError: function(res, detail = null, message = "Server error") {
+    sendError: function (res, detail = null, message = "Server error") {
         res.send({ result: 'failure', detail: detail, message: message });
     },
 
-    filterListByPage: function(page, limit, list) {
+    filterListByPage: function (page, limit, list) {
         var result = [];
         var length = list.length;
         if (length < limit) {
@@ -120,7 +120,7 @@ module.exports = {
         }
     },
 
-    sortListByKey: function(order, list, key) {
+    sortListByKey: function (order, list, key) {
         for (var i = 0; i < list.length; i++) {
             for (var j = 0; j < list.length; j++) {
                 var value1 = list[i][key].toString().toLowerCase();
@@ -134,19 +134,19 @@ module.exports = {
         }
     },
 
-    getFirstName: function(name) {
+    getFirstName: function (name) {
         var i = name.lastIndexOf(' ');
         var first_name = name.substr(0, i);
         return first_name;
     },
 
-    getLastName: function(name) {
+    getLastName: function (name) {
         var i = name.lastIndexOf(' ');
         var last_name = name.substr(i + 1, name.length - 1);
         return last_name;
     },
 
-    getProgramCodeFromClassName: function(class_name) {
+    getProgramCodeFromClassName: function (class_name) {
         var program_code = '';
         for (var i = 0; i < class_name.length; i++) {
             if (isNaN(class_name[i])) {
@@ -156,9 +156,9 @@ module.exports = {
         return program_code;
     },
 
-    sendMail: function(from, to, subject, text) {
+    sendMail: function (from, to, subject, text) {
         fs.readFile('./api/data/settings.json', 'utf8', function (error, data) {
-            if (error){
+            if (error) {
                 if (error.code === 'ENOENT') {
                     return console.log('Setting file not found');
                 } else {
@@ -166,8 +166,8 @@ module.exports = {
                 }
             }
             var settings = JSON.parse(data);
-            for(var i = 0 ; i < settings.emails.length; i++){
-                if(settings.selected_host == settings.emails[i].host_name){
+            for (var i = 0; i < settings.emails.length; i++) {
+                if (settings.selected_host == settings.emails[i].host_name) {
                     let transporter = nodemailer.createTransport(settings.emails[i].config);
                     let mailOptions = {
                         from: from + ' <' + settings.emails[i].config.auth.user + '>',
@@ -181,14 +181,14 @@ module.exports = {
                             return console.log(error);
                         }
                         console.log('Message %s sent: %s', info.messageId, info.response);
-                        console.log('Mail send from ', from, ' to ' , to)
+                        console.log('Mail send from ', from, ' to ', to)
                     });
                 }
             }
         });
     },
-    
-    removeExtraFromTeacherName: function(teacher_name) {
+
+    removeExtraFromTeacherName: function (teacher_name) {
         var name = teacher_name;
         //cắt học vị
         var i = name.indexOf('. ');
@@ -202,29 +202,29 @@ module.exports = {
         }
         return name;
     },
-    getEmailStudentApcs: function(teacher_name) {
+    getEmailStudentApcs: function (teacher_name) {
         var email = '';
 
         var str = teacher_name;
         str = str.toLowerCase();
-        str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g,"a");
-        str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g,"e");
-        str = str.replace(/ì|í|ị|ỉ|ĩ/g,"i");
-        str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g,"o");
-        str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g,"u");
-        str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g,"y");
-        str = str.replace(/đ/g,"d");
-        str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g," ");
-        str = str.replace(/ + /g," ");
+        str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+        str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+        str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+        str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+        str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+        str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+        str = str.replace(/đ/g, "d");
+        str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, " ");
+        str = str.replace(/ + /g, " ");
         str = str.trim();
         var words = str.split(' ')
         console.log(words)
         i = 0
-        for (i = 0; i < words.length - 1; i++ )
-          email += words[i][0].toLowerCase()
+        for (i = 0; i < words.length - 1; i++)
+            email += words[i][0].toLowerCase()
         email += words[i].toLowerCase()
         email += '@apcs.vn'
-        console.log("email" , email)
+        console.log("email", email)
         return email
     }
 };
