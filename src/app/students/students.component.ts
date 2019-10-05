@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { StudentService, AppService,ImportModalComponent,ExportModalComponent } from '../shared/shared.module';
+import { StudentService, AppService, ImportModalComponent, ExportModalComponent } from '../shared/shared.module';
 declare var jQuery: any;
 @Component({
     selector: 'app-students',
@@ -12,15 +12,15 @@ export class StudentsComponent implements OnInit {
     public sort = 'none'; // ['none', 'asc', 'dsc'];
     public sort_tag = '';
 
-    public semesters: Array < any > = [];
-    public programs: Array < any > = [];
-    public classes: Array < any > = [];
+    public semesters: Array<any> = [];
+    public programs: Array<any> = [];
+    public classes: Array<any> = [];
 
     public selected_status = this.appService.student_status.active.id;
-    public student_list: Array < any > = [];
+    public student_list: Array<any> = [];
     public selectedSemester: any;
     public selectedProgram: any;
-    public filteredClasses: Array < any > ;
+    public filteredClasses: Array<any>;
     public selectedClasses: any;
     public searchText: string;
     public pageNumber: number = 1;
@@ -37,12 +37,12 @@ export class StudentsComponent implements OnInit {
     public newClass: number = 0;
     public newProgram: number = 0;
     public newNote: string = '';
-    public constructor(public  appService: AppService, public  studentService: StudentService, public  router: Router) {}
+    public constructor(public appService: AppService, public studentService: StudentService, public router: Router) { }
 
     public ngOnInit() {
         this.getSemesterProgramClass();
     }
-    public getSemesterProgramClass(){
+    public getSemesterProgramClass() {
         this.appService.getSemesterProgramClass().subscribe(results => {
             this.semesters = results.semesters;
             this.selectedSemester = this.semesters.length > 0 ? this.semesters[this.semesters.length - 1].id : 0;
@@ -50,10 +50,10 @@ export class StudentsComponent implements OnInit {
             this.programs = this.new_programs = results.programs;
             this.selectedProgram = this.programs.length > 0 ? this.programs[0].id : 0;
             this.onChangeProgram();
-        }, error => { this.appService.showPNotify('failure', "Server Error! Can't semester class program", 'error'); });   
+        }, error => { this.appService.showPNotify('failure', "Server Error! Can't semester class program", 'error'); });
     }
     public getCurrentList() {
-        this.studentService.getListStudents(this.selectedProgram, this.selectedClasses,this.selected_status,this.searchText, this.pageNumber, this.itemsPerPage)
+        this.studentService.getListStudents(this.selectedProgram, this.selectedClasses, this.selected_status, this.searchText, this.pageNumber, this.itemsPerPage)
             .subscribe(result => {
                 this.student_list = result.student_list;
                 this.totalItems = result.total_items;
@@ -79,7 +79,7 @@ export class StudentsComponent implements OnInit {
     public onCellClick(id: any) {
         this.router.navigate(['/students/', id]);
     }
-    onChangeStudentCode(){
+    onChangeStudentCode() {
         this.newEmail = this.newCode + "@student.hcmus.edu.vn";
     }
     public onOpenAddStudent() {
@@ -104,7 +104,7 @@ export class StudentsComponent implements OnInit {
                     this.newClass = this.newProgram = 0;
                     this.getCurrentList();
                 }
-                this.appService.showPNotify(this.apiResult,this.apiResultMessage,this.apiResult == 'success' ? 'success' : 'error');
+                this.appService.showPNotify(this.apiResult, this.apiResultMessage, this.apiResult == 'success' ? 'success' : 'error');
             }, err => { this.appService.showPNotify('failure', "Server Error! Can't add student", 'error'); });
     }
     public new_programs = [];
@@ -119,19 +119,19 @@ export class StudentsComponent implements OnInit {
         this.newClass = this.new_classes[0].id;
     }
 
-    @ViewChild(ImportModalComponent)
-    public  importModal: ImportModalComponent;
-    public onImportStudent(){
+    @ViewChild(ImportModalComponent, { static: true })
+    public importModal: ImportModalComponent;
+    public onImportStudent() {
         this.importModal.onOpenModal();
     }
-    public onCloseImport(event : any){
+    public onCloseImport(event: any) {
         this.getSemesterProgramClass();
     }
 
-    @ViewChild(ExportModalComponent)
-    public  exportModal: ExportModalComponent;
-    public export_search_data : any = {};
-    public onExportStudent(){
+    @ViewChild(ExportModalComponent, { static: true })
+    public exportModal: ExportModalComponent;
+    public export_search_data: any = {};
+    public onExportStudent() {
         this.export_search_data = {};
         this.export_search_data['search_text'] = this.searchText;
         this.export_search_data['program_id'] = this.selectedProgram;

@@ -1,12 +1,12 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
-import { ScheduleService, AppService, SemesterService,ImportModalComponent,ExportModalComponent } from '../../shared/shared.module';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ScheduleService, AppService, SemesterService, ImportModalComponent, ExportModalComponent } from '../../shared/shared.module';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 @Component({
     selector: 'app-schedule-staff',
     templateUrl: './schedule-staff.component.html'
 })
 export class ScheduleStaffComponent implements OnInit {
-    constructor(public  scheduleService: ScheduleService, public  appService: AppService, public  router: Router, public  semesterService: SemesterService) {}
+    constructor(public scheduleService: ScheduleService, public appService: AppService, public router: Router, public semesterService: SemesterService) { }
     public sessions = [
         [],
         [],
@@ -34,14 +34,14 @@ export class ScheduleStaffComponent implements OnInit {
         [],
     ];
     public semester = {};
-    public courses: Array < any > = [];
+    public courses: Array<any> = [];
 
-    public semesters: Array < any > = [];
+    public semesters: Array<any> = [];
     public selectedSemester: any;
-    public programs: Array < any > = [];
+    public programs: Array<any> = [];
     public selectedProgram: any;
-    public classes: Array < any > ;
-    public filteredClasses: Array < any > ;
+    public classes: Array<any>;
+    public filteredClasses: Array<any>;
     public selectedClass: any;
 
     public onChangeProgram() {
@@ -107,7 +107,7 @@ export class ScheduleStaffComponent implements OnInit {
     public getSchedulesAndCourses() {
         this.scheduleService.getSchedulesAndCourses(this.selectedProgram, this.selectedClass, this.selectedSemester)
             .subscribe(result => {
-                if(result.result == 'success'){
+                if (result.result == 'success') {
                     this.courses = result.courses;
                     for (var i = 0; i < this.courses.length; i++) {
                         for (var j = 0; j < this.filteredClasses.length; j++) {
@@ -124,7 +124,7 @@ export class ScheduleStaffComponent implements OnInit {
     public getSemesterInfo() {
         this.semesterService.getSemester(this.selectedSemester)
             .subscribe(result => {
-                if(result.result == 'success'){
+                if (result.result == 'success') {
                     this.semester = result.semester;
                 }
             }, error => { this.appService.showPNotify('failure', "Server Error! Can't get semester", 'error'); });
@@ -143,19 +143,19 @@ export class ScheduleStaffComponent implements OnInit {
     public onCourseClick(course_id: number) {
         this.router.navigate(['/courses/', course_id]);
     }
-    @ViewChild(ImportModalComponent)
-    public  importModal: ImportModalComponent;
-    public onImportSchedule(){
+    @ViewChild(ImportModalComponent, { static: true })
+    public importModal: ImportModalComponent;
+    public onImportSchedule() {
         this.importModal.onOpenModal();
     }
-    public onCloseImport(event : any){
+    public onCloseImport(event: any) {
         this.getSchedulesAndCourses();
     }
 
-    @ViewChild(ExportModalComponent)
-    public  exportModal: ExportModalComponent;
-    public export_search_data : any = {};
-    public onExportSchedule(){
+    @ViewChild(ExportModalComponent, { static: true })
+    public exportModal: ExportModalComponent;
+    public export_search_data: any = {};
+    public onExportSchedule() {
         this.export_search_data = {};
         this.export_search_data['program_id'] = this.selectedProgram;
         this.export_search_data['class_id'] = this.selectedClass;

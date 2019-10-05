@@ -1,5 +1,5 @@
-import { Component, OnInit ,ViewChild} from '@angular/core';
-import {  AppService, AuthService,ExcelService,ExportModalComponent } from '../shared/shared.module';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { AppService, AuthService, ExcelService, ExportModalComponent } from '../shared/shared.module';
 
 @Component({
 	selector: 'app-statistic',
@@ -7,46 +7,46 @@ import {  AppService, AuthService,ExcelService,ExportModalComponent } from '../s
 })
 export class StatisticComponent implements OnInit {
 
-	public constructor(public  appService: AppService,public  authService: AuthService,public  excelService: ExcelService) {
+	public constructor(public appService: AppService, public authService: AuthService, public excelService: ExcelService) {
 	}
 
-	public ngOnInit() {}
+	public ngOnInit() { }
 
 
-	@ViewChild(ExportModalComponent)
-    public  exportModal: ExportModalComponent;
-    public export_type;
-    public export_title;
+	@ViewChild(ExportModalComponent, { static: true })
+	public exportModal: ExportModalComponent;
+	public export_type;
+	public export_title;
 
-	public onExportExamineesList(){
+	public onExportExamineesList() {
 		this.export_type = this.appService.import_export_type.examinees;
 		this.export_title = 'Export Examinees';
-		setTimeout(()=>{
+		setTimeout(() => {
 			this.exportModal.onOpenModal();
-        },500);
+		}, 500);
 	}
 
-	public onExportAttendanceSummary(){
+	public onExportAttendanceSummary() {
 		this.export_type = this.appService.import_export_type.attendance_summary;
 		this.export_title = 'Export Attendance Summary';
-		setTimeout(()=>{
+		setTimeout(() => {
 			this.exportModal.onOpenModal();
-        },500);
+		}, 500);
 	}
 
-	public onExportAttendanceLists(){
+	public onExportAttendanceLists() {
 		this.export_type = this.appService.import_export_type.attendance_lists;
 		this.export_title = 'Export Attendance Lists';
-		setTimeout(()=>{
+		setTimeout(() => {
 			this.exportModal.onOpenModal();
-        },500);
+		}, 500);
 	}
 
-	public onExportExceededAbsence(){
+	public onExportExceededAbsence() {
 		this.export_type = this.appService.import_export_type.exceeded_absence_limit;
 		this.export_title = 'Export Exceeded Absences Limit';
-		setTimeout(()=>{
+		setTimeout(() => {
 			this.exportModal.onOpenModal();
-        },500);
+		}, 500);
 	}
 }

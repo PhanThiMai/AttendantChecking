@@ -4,12 +4,15 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AppConfig } from '../config'
 import { AuthService } from './auth.service'
+import 'rxjs/add/operator/map'
+
+import 'rxjs/Rx';
 declare var PNotify: any;
 declare var jQuery: any;
 @Injectable()
 export class AppService {
 
-    constructor(public http: Http, public appConfig: AppConfig, public authService: AuthService, public router: Router) {}
+    constructor(public http: Http, public appConfig: AppConfig, public authService: AuthService, public router: Router) { }
     public feedback_status = [
         {
             id: 0,
@@ -84,7 +87,7 @@ export class AppService {
             text: '90s'
         },
         {
-            value:120,
+            value: 120,
             text: '120s'
         }
     ];
@@ -103,28 +106,29 @@ export class AppService {
         },
     };
     public notification_type = {
-        send_feedback:0,
-        reply_feedback:1,
-        send_absence_request:2,
-        accept_absence_request:3,
-        reject_absence_request:4,
-        open_attendance:5,
-        request_to_be_check_attendance:6,
+        send_feedback: 0,
+        reply_feedback: 1,
+        send_absence_request: 2,
+        accept_absence_request: 3,
+        reject_absence_request: 4,
+        open_attendance: 5,
+        request_to_be_check_attendance: 6,
     };
     public default_avatar = 'http://i.imgur.com/FTa2JWD.png';
-    public student_interaction_type = {answer_question: 0,discuss: 1, present: 2};
-    public import_export_type = { student: 0, teacher: 1, course: 2, schedule: 3, examinees: 4, attendance_summary: 5, class:6,
-        attendance_list:7,
-        attendance_lists:8,
-        exceeded_absence_limit:9
+    public student_interaction_type = { answer_question: 0, discuss: 1, present: 2 };
+    public import_export_type = {
+        student: 0, teacher: 1, course: 2, schedule: 3, examinees: 4, attendance_summary: 5, class: 6,
+        attendance_list: 7,
+        attendance_lists: 8,
+        exceeded_absence_limit: 9
     };
     public enrollment_status = { compulsory: 0, elective: 1 };
     public attendance_status = { normal: 0, exemption: 1 };
     public userType = { admin: 4, student: 1, teacher: 2, staff: 3 };
-    public attendance_type = { permited_absent:-1, absent: 0, checklist: 1, qr: 2, quiz: 3, face: 4 };
-    
+    public attendance_type = { permited_absent: -1, absent: 0, checklist: 1, qr: 2, quiz: 3, face: 4 };
+
     public getSemesterProgramClassUrl = this.appConfig.apiHost + '/semesters-programs-classes';
-    public getSemesterProgramClass(): Observable < { result: string, semesters: Array < any > , programs: Array < any > , classes: Array < any > , message: string } > {
+    public getSemesterProgramClass(): Observable<{ result: string, semesters: Array<any>, programs: Array<any>, classes: Array<any>, message: string }> {
         let authToken = this.authService.token;
         let headers = new Headers();
         headers.append('x-access-token', `${authToken}`);
@@ -135,17 +139,17 @@ export class AppService {
             //...errors if any
             //.catch((error: any) => Observable.throw(error || 'Server error'));
             .catch((error: any) => {
-                if(error.status == 401){
+                if (error.status == 401) {
                     this.authService.tokenExpired(this.router.url);
                 }
                 //this.authService.tokenExpired(this.router.url);
                 return Observable.throw(error || 'Server error');
             });
     }
-    
+
 
     public changePasswordUrl = this.appConfig.apiHost + '/user/change-password';
-    public changePassword(current_password, new_password, confirm_password): Observable < { result: string, message: string } > {
+    public changePassword(current_password, new_password, confirm_password): Observable<{ result: string, message: string }> {
         var params = {
             'current_password': current_password,
             'new_password': new_password,
@@ -161,7 +165,7 @@ export class AppService {
             //...errors if any
             //.catch((error: any) => Observable.throw(error || 'Server error'));
             .catch((error: any) => {
-                if(error.status == 401){
+                if (error.status == 401) {
                     this.authService.tokenExpired(this.router.url);
                 }
                 //this.authService.tokenExpired(this.router.url);
@@ -170,9 +174,9 @@ export class AppService {
     }
 
     public uploadAvatarUrl = 'https://api.imgur.com/3/upload';
-    public uploadAvatar(avatar : any): Observable < { result: any} > {
+    public uploadAvatar(avatar: any): Observable<{ result: any }> {
         var formData = new FormData();
-        formData.append("image",avatar);
+        formData.append("image", avatar);
         let headers = new Headers();
         headers.append("Authorization", "Client-ID 56f531f985863ea");
         let options = new RequestOptions({ headers: headers });
@@ -182,7 +186,7 @@ export class AppService {
             //...errors if any
             //.catch((error: any) => Observable.throw(error || 'Server error'));
             .catch((error: any) => {
-                if(error.status == 401){
+                if (error.status == 401) {
                     this.authService.tokenExpired(this.router.url);
                 }
                 //this.authService.tokenExpired(this.router.url);
@@ -205,7 +209,7 @@ export class AppService {
     }
 
     public getStaffsUrl = this.appConfig.apiHost + '/staffs';
-    public getStaffs(): Observable < { result: any, staffs : any, message: string} > {
+    public getStaffs(): Observable<{ result: any, staffs: any, message: string }> {
         let authToken = this.authService.token;
         let headers = new Headers();
         headers.append('x-access-token', `${authToken}`);
@@ -225,7 +229,7 @@ export class AppService {
     }
 
     public addStaffUrl = this.appConfig.apiHost + '/add-staff';
-    public addStaff(email : string, phone : string, first_name : string, last_name : string): Observable < { result: any, staff : any, message: string} > {
+    public addStaff(email: string, phone: string, first_name: string, last_name: string): Observable<{ result: any, staff: any, message: string }> {
         var params = {
             'email': email,
             'phone': phone,
@@ -242,7 +246,7 @@ export class AppService {
             //...errors if any
             //.catch((error: any) => Observable.throw(error || 'Server error'));
             .catch((error: any) => {
-                if(error.status == 401){
+                if (error.status == 401) {
                     this.authService.tokenExpired(this.router.url);
                 }
                 //this.authService.tokenExpired(this.router.url);
@@ -251,7 +255,7 @@ export class AppService {
     }
 
     public removeStaffUrl = this.appConfig.apiHost + '/remove-staff';
-    public removeStaff(email : string): Observable < { result: any, message: string} > {
+    public removeStaff(email: string): Observable<{ result: any, message: string }> {
         var params = {
             'email': email,
         };
@@ -265,7 +269,7 @@ export class AppService {
             //...errors if any
             //.catch((error: any) => Observable.throw(error || 'Server error'));
             .catch((error: any) => {
-                if(error.status == 401){
+                if (error.status == 401) {
                     this.authService.tokenExpired(this.router.url);
                 }
                 //this.authService.tokenExpired(this.router.url);
@@ -274,7 +278,7 @@ export class AppService {
     }
 
     public sendReplyUrl = this.appConfig.apiHost + '/feedback/send-reply';
-    public sendReply(content : string, id: number): Observable < { result: any, message: string} > {
+    public sendReply(content: string, id: number): Observable<{ result: any, message: string }> {
         var params = {
             'content': content,
             'id': id
@@ -289,7 +293,7 @@ export class AppService {
             //...errors if any
             //.catch((error: any) => Observable.throw(error || 'Server error'));
             .catch((error: any) => {
-                if(error.status == 401){
+                if (error.status == 401) {
                     this.authService.tokenExpired(this.router.url);
                 }
                 //this.authService.tokenExpired(this.router.url);
@@ -298,7 +302,7 @@ export class AppService {
     }
 
     public getSettingsUrl = this.appConfig.apiHost + '/settings';
-    public getSettings(): Observable < { result: any, settings : any, message: string} > {
+    public getSettings(): Observable<{ result: any, settings: any, message: string }> {
         let authToken = this.authService.token;
         let headers = new Headers();
         headers.append('x-access-token', `${authToken}`);
@@ -318,15 +322,15 @@ export class AppService {
     }
 
     public saveSettingsUrl = this.appConfig.apiHost + '/settings';
-    public saveSettings(settings : any): Observable < { result: any, message: string} > {
+    public saveSettings(settings: any): Observable<{ result: any, message: string }> {
         var params = {
-            'settings' : settings
+            'settings': settings
         }
         let authToken = this.authService.token;
         let headers = new Headers();
         headers.append('x-access-token', `${authToken}`);
         let options = new RequestOptions({ headers: headers });
-        return this.http.post(this.saveSettingsUrl,params, options)
+        return this.http.post(this.saveSettingsUrl, params, options)
             // ...and calling .json() on the response to return data
             .map((res: Response) => res.json())
             //...errors if any

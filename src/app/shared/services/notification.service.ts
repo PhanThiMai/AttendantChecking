@@ -4,13 +4,16 @@ import { Observable } from 'rxjs';
 import { AppConfig } from '../config'
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
+import 'rxjs/add/operator/map'
+
+import 'rxjs/Rx';
 @Injectable()
 export class NotificationService {
     // Resolve HTTP using the constructor
-    constructor(public  http: Http, public  appConfig: AppConfig,public  authService: AuthService,public  router :Router) {}
+    constructor(public http: Http, public appConfig: AppConfig, public authService: AuthService, public router: Router) { }
 
     public getNotificationUrl = this.appConfig.apiHost + '/notification/list';
-    public getNotification(user_id: number, user_role:number): Observable < { result: string, notifications: Array < any >, message:string } > {
+    public getNotification(user_id: number, user_role: number): Observable<{ result: string, notifications: Array<any>, message: string }> {
         var params = {
             'user_id': user_id,
             'user_role': user_role
@@ -33,7 +36,7 @@ export class NotificationService {
     }
 
     public readNotificationUrl = this.appConfig.apiHost + '/notification/read';
-    public readNotification(id: number): Observable < { result: string, message:string } > {
+    public readNotification(id: number): Observable<{ result: string, message: string }> {
         var params = {
             'id': id,
         };

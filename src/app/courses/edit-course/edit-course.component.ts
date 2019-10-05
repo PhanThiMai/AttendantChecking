@@ -1,5 +1,5 @@
-import { Component, OnInit, Input,ViewChild } from '@angular/core';
-import {Location} from '@angular/common';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Location } from '@angular/common';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { TeacherService, CourseService, AppService, ResultMessageModalComponent } from '../../shared/shared.module';
 declare let jQuery: any;
@@ -13,60 +13,60 @@ export class EditCourseComponent implements OnInit {
     @Input() public type: string;
     public course_id: any;
     public course = {
-        code : '',
+        code: '',
         name: '',
         note: '',
         office_hour: ''
     };
-    public lecturers: Array < any > = [];
-    public TAs: Array < any > = [];
+    public lecturers: Array<any> = [];
+    public TAs: Array<any> = [];
     public apiResult: string;
     public apiResultMessage: string;
-    @ViewChild(ResultMessageModalComponent)
+    @ViewChild(ResultMessageModalComponent, { static: true })
     public resultMessageModal: ResultMessageModalComponent;
 
-    public constructor(public route: ActivatedRoute,public router: Router,public location : Location, public appService: AppService, public courseService: CourseService, public teacherService: TeacherService) {
+    public constructor(public route: ActivatedRoute, public router: Router, public location: Location, public appService: AppService, public courseService: CourseService, public teacherService: TeacherService) {
 
     }
     public ngOnInit(): void {
         this.teacherService.getListTeachers(this.searchText, 1, 9999)
             .subscribe(result => {
                 this.teachers = result.teacher_list;
-            }, error => { this.appService.showPNotify('failure', "Server Error! Can't get teacher list", 'error');  });
-        this.route.params.subscribe(params => {this.course_id = params['id'] });
+            }, error => { this.appService.showPNotify('failure', "Server Error! Can't get teacher list", 'error'); });
+        this.route.params.subscribe(params => { this.course_id = params['id'] });
         this.courseService.getCourseDetail(this.course_id).subscribe(result => {
             this.course = result.course;
-            if(this.course['not_in_current_semester']){
-                this.router.navigate(['/courses/',this.course_id]);
+            if (this.course['not_in_current_semester']) {
+                this.router.navigate(['/courses/', this.course_id]);
                 setTimeout(() => {
                     this.appService.showPNotify('failure', "Can't edit course, that semester is ended", 'error');
                 }, 3000);
             }
             this.lecturers = result.lecturers;
             this.TAs = result.TAs;
-            for(var i = 0 ; i < this.lecturers.length; i++){
-                for(var j = 0 ;j < this.teachers.length; j++){
-                    if(this.lecturers[i].id == this.teachers[j].id){
-                        this.teachers.splice(j,1);
+            for (var i = 0; i < this.lecturers.length; i++) {
+                for (var j = 0; j < this.teachers.length; j++) {
+                    if (this.lecturers[i].id == this.teachers[j].id) {
+                        this.teachers.splice(j, 1);
                     }
                 }
             }
-            for(var i = 0 ; i < this.TAs.length; i++){
-                for(var j = 0 ;j < this.teachers.length; j++){
-                    if(this.TAs[i].id == this.teachers[j].id){
-                        this.teachers.splice(j,1);
+            for (var i = 0; i < this.TAs.length; i++) {
+                for (var j = 0; j < this.teachers.length; j++) {
+                    if (this.TAs[i].id == this.teachers[j].id) {
+                        this.teachers.splice(j, 1);
                     }
                 }
             }
             this.filtered_teachers = this.teachers.slice();
-        }, error => { this.appService.showPNotify('failure', "Server Error! Can't get course detail", 'error');  });
+        }, error => { this.appService.showPNotify('failure', "Server Error! Can't get course detail", 'error'); });
     }
 
     public searchText: string = '';
-    public teachers: Array < any > = [];
-    public filtered_teachers: Array < any > = [];
-    public temp_lecturers: Array < any > = [];
-    public temp_TAs: Array < any > = [];
+    public teachers: Array<any> = [];
+    public filtered_teachers: Array<any> = [];
+    public temp_lecturers: Array<any> = [];
+    public temp_TAs: Array<any> = [];
 
     public onCancelEditCourse() {
         this.location.back();
@@ -74,7 +74,7 @@ export class EditCourseComponent implements OnInit {
 
     public onSaveCourse(isContinue: boolean = false) {
         //jQuery("#progressModal").modal("show");
-        this.courseService.editCourse(this.course_id,this.course.code, this.course.name, this.lecturers, this.TAs, this.course.office_hour, this.course.note)
+        this.courseService.editCourse(this.course_id, this.course.code, this.course.name, this.lecturers, this.TAs, this.course.office_hour, this.course.note)
             .subscribe(result => {
                 this.apiResult = result.result;
                 if (this.apiResult == 'failure') {
@@ -82,17 +82,17 @@ export class EditCourseComponent implements OnInit {
                 }
                 if (this.apiResult == 'success') {
                     this.apiResultMessage = result.message + '...Redirecting';
-                        setTimeout(() => {
-                            this.router.navigate(['/courses/']);
-                        }, 3000);
+                    setTimeout(() => {
+                        this.router.navigate(['/courses/']);
+                    }, 3000);
                 }
                 //jQuery("#progressModal").modal("hide");
-                this.appService.showPNotify(this.apiResult,this.apiResultMessage,this.apiResult == 'success' ? 'success' : 'error');
+                this.appService.showPNotify(this.apiResult, this.apiResultMessage, this.apiResult == 'success' ? 'success' : 'error');
             }, error => {
                 this.apiResult = 'failure;'
                 this.apiResultMessage = 'Server Error';
                 //jQuery("#progressModal").modal("hide");
-                this.appService.showPNotify(this.apiResult,this.apiResultMessage,this.apiResult == 'success' ? 'success' : 'error');
+                this.appService.showPNotify(this.apiResult, this.apiResultMessage, this.apiResult == 'success' ? 'success' : 'error');
             });
     }
 

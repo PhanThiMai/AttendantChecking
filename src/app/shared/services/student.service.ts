@@ -5,14 +5,17 @@ import { AppConfig } from '../config';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 import { LocalStorageService } from 'angular-2-local-storage';
+import 'rxjs/add/operator/map'
+
+import 'rxjs/Rx';
 @Injectable()
 export class StudentService {
     // Resolve HTTP using the constructor
-    public constructor(public  http: Http, public  appConfig: AppConfig, public  authService: AuthService,
-        public  router:Router,public localStorage: LocalStorageService) {}
-        // private instance variable to hold base url
-    public  getListStudentsUrl = this.appConfig.apiHost + '/student/list';
-    public getListStudents(program_id: number, class_id: number,status : number,searchText: string, page: number = 1, limit: number = 10): Observable < { result: string, total_items: number, student_list: Array<any>, message:string } > {
+    public constructor(public http: Http, public appConfig: AppConfig, public authService: AuthService,
+        public router: Router, public localStorage: LocalStorageService) { }
+    // private instance variable to hold base url
+    public getListStudentsUrl = this.appConfig.apiHost + '/student/list';
+    public getListStudents(program_id: number, class_id: number, status: number, searchText: string, page: number = 1, limit: number = 10): Observable<{ result: string, total_items: number, student_list: Array<any>, message: string }> {
         var params = {
             'searchText': searchText,
             'page': page,
@@ -25,7 +28,7 @@ export class StudentService {
         let headers = new Headers();
         headers.append('x-access-token', `${authToken}`);
         let options = new RequestOptions({ headers: headers });
-        return this.http.post(this.getListStudentsUrl, params,options)
+        return this.http.post(this.getListStudentsUrl, params, options)
             // ...and calling .json() on the response to return data
             .map((res: Response) => res.json())
             //...errors if any
@@ -38,13 +41,13 @@ export class StudentService {
             });
     }
 
-    public  getStudentDetailsUrl = this.appConfig.apiHost + '/student/detail';
-    public getStudentrDetail(id: number): Observable < { result: string, student: any, current_courses: Array<any>, message:string} > {
+    public getStudentDetailsUrl = this.appConfig.apiHost + '/student/detail';
+    public getStudentrDetail(id: number): Observable<{ result: string, student: any, current_courses: Array<any>, message: string }> {
         let authToken = this.authService.token;
         let headers = new Headers();
         headers.append('x-access-token', `${authToken}`);
         let options = new RequestOptions({ headers: headers });
-        return this.http.get(`${this.getStudentDetailsUrl}/${id}`,options)
+        return this.http.get(`${this.getStudentDetailsUrl}/${id}`, options)
             // ...and calling .json() on the response to return data
             .map((res: Response) => res.json())
             //...errors if any
@@ -57,8 +60,8 @@ export class StudentService {
             });
     }
 
-    public  addStudentUrl = this.appConfig.apiHost + '/student/add';
-    public addStudent(program_id: number, class_id:number, code: string , first_name: string, last_name: string, email: string, phone: string = null, note:string = null): Observable < { result: string, message: string } > {
+    public addStudentUrl = this.appConfig.apiHost + '/student/add';
+    public addStudent(program_id: number, class_id: number, code: string, first_name: string, last_name: string, email: string, phone: string = null, note: string = null): Observable<{ result: string, message: string }> {
         var params = {
             'program_id': program_id,
             'class_id': class_id,
@@ -86,8 +89,8 @@ export class StudentService {
             });
     }
 
-    public  updateStudentUrl = this.appConfig.apiHost + '/student/update';
-    public updateStudent(id:number , name: string, email: string, phone: string, avatar:string, status:number): Observable < { result: string, message: string } > {
+    public updateStudentUrl = this.appConfig.apiHost + '/student/update';
+    public updateStudent(id: number, name: string, email: string, phone: string, avatar: string, status: number): Observable<{ result: string, message: string }> {
         var params = {
             'id': id,
             'name': name,
@@ -114,7 +117,7 @@ export class StudentService {
     }
 
     public importStudentUrl = this.appConfig.apiHost + '/student/import';
-    public importStudent(class_name:string , student_list:Array<any>): Observable < { result: string, message: string } > {
+    public importStudent(class_name: string, student_list: Array<any>): Observable<{ result: string, message: string }> {
         var params = {
             'class_name': class_name,
             'student_list': student_list
@@ -137,7 +140,7 @@ export class StudentService {
     }
 
     public exportStudentUrl = this.appConfig.apiHost + '/student/export';
-    public exportStudent(classes_id:Array<any>): Observable < { result: string,student_lists:Array<any>, message: string } > {
+    public exportStudent(classes_id: Array<any>): Observable<{ result: string, student_lists: Array<any>, message: string }> {
         var params = {
             'classes_id': classes_id,
         };
@@ -159,7 +162,7 @@ export class StudentService {
     }
 
     public getStudentDetailByCodeUrl = this.appConfig.apiHost + '/student/detail-by-code';
-    public getStudentDetailByCode(code: string): Observable < { result: string, student: any, message:string} > {
+    public getStudentDetailByCode(code: string): Observable<{ result: string, student: any, message: string }> {
         var params = {
             'code': code,
         };
@@ -181,7 +184,7 @@ export class StudentService {
     }
 
     public changeAttendanceStatusUrl = this.appConfig.apiHost + '/student/change-attendance-status';
-    public changeAttendanceStatus(student_id: number,course_id: number,class_id: number,status: number): Observable < { result: string, message:string} > {
+    public changeAttendanceStatus(student_id: number, course_id: number, class_id: number, status: number): Observable<{ result: string, message: string }> {
         var params = {
             'student_id': student_id,
             'course_id': course_id,
@@ -206,7 +209,7 @@ export class StudentService {
     }
 
     public exportExamineesUrl = this.appConfig.apiHost + '/student/export-examinees';
-    public exportExaminees(class_has_course_id:Array<any>): Observable < { result: string,examinees_lists:Array<any>, message: string } > {
+    public exportExaminees(class_has_course_id: Array<any>): Observable<{ result: string, examinees_lists: Array<any>, message: string }> {
         var params = {
             'class_has_course_id': class_has_course_id,
         };
@@ -228,7 +231,7 @@ export class StudentService {
     }
 
     public exportAttenadanceSummaryUrl = this.appConfig.apiHost + '/student/export-attendance-summary';
-    public exportAttendanceSummary(class_has_course_id:Array<any>): Observable < { result: string,attendance_summary_lists:Array<any>, message: string } > {
+    public exportAttendanceSummary(class_has_course_id: Array<any>): Observable<{ result: string, attendance_summary_lists: Array<any>, message: string }> {
         var params = {
             'class_has_course_id': class_has_course_id,
         };
@@ -250,7 +253,7 @@ export class StudentService {
     }
 
     public exportAttenadanceListsUrl = this.appConfig.apiHost + '/student/export-attendance-lists';
-    public exportAttendanceLists(class_has_course_id:Array<any>): Observable < { result: string,attendance_lists:Array<any>, message: string } > {
+    public exportAttendanceLists(class_has_course_id: Array<any>): Observable<{ result: string, attendance_lists: Array<any>, message: string }> {
         var params = {
             'class_has_course_id': class_has_course_id,
         };
@@ -272,7 +275,7 @@ export class StudentService {
     }
 
     public exportExceededAbsenceLimitUrl = this.appConfig.apiHost + '/student/export-exceeded-absence-limit';
-    public exportExceededAbsenceLimit(class_has_course_id:Array<any>): Observable < { result: string,exceeded_absence_limit:Array<any>, message: string } > {
+    public exportExceededAbsenceLimit(class_has_course_id: Array<any>): Observable<{ result: string, exceeded_absence_limit: Array<any>, message: string }> {
         var params = {
             'class_has_course_id': class_has_course_id,
         };
@@ -293,8 +296,8 @@ export class StudentService {
             });
     }
 
-    public  updateStudentInteractionUrl = this.appConfig.apiHost + '/attendance/update-interaction';
-    public updateStudentInteraction(id:number, attendance_id:number, interaction_type: number): Observable < { result: string, message: string } > {
+    public updateStudentInteractionUrl = this.appConfig.apiHost + '/attendance/update-interaction';
+    public updateStudentInteraction(id: number, attendance_id: number, interaction_type: number): Observable<{ result: string, message: string }> {
         var params = {
             'id': id,
             'attendance_id': attendance_id,
@@ -318,7 +321,7 @@ export class StudentService {
     }
 
     public getStudentByCourseUrl = this.appConfig.apiHost + '/student/list-by-course';
-    public getStudentByCourse(course_id: number, class_id:number): Observable < { result: string,student_list: Array<any>, message: string } > {
+    public getStudentByCourse(course_id: number, class_id: number): Observable<{ result: string, student_list: Array<any>, message: string }> {
         var params = {
             'course_id': course_id,
             'class_id': class_id,
@@ -341,13 +344,13 @@ export class StudentService {
     }
 
     public getTeachingTeacherListUrl = this.appConfig.apiHost + '/student/teaching_teacher_list';
-    public getTeachingTeacherList(): Observable < { result: string, total_items: number, teacher_list: Array<any>, message:string } > {
+    public getTeachingTeacherList(): Observable<{ result: string, total_items: number, teacher_list: Array<any>, message: string }> {
         var params = {};
         let authToken = this.authService.token;
         let headers = new Headers();
         headers.append('x-access-token', `${authToken}`);
         let options = new RequestOptions({ headers: headers });
-        return this.http.post(this.getTeachingTeacherListUrl, params,options)
+        return this.http.post(this.getTeachingTeacherListUrl, params, options)
             // ...and calling .json() on the response to return data
             .map((res: Response) => res.json())
             //...errors if any

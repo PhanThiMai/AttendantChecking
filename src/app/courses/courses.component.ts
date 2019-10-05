@@ -1,6 +1,6 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { CourseService, AppService,ImportModalComponent,ExportModalComponent } from '../shared/shared.module';
+import { CourseService, AppService, ImportModalComponent, ExportModalComponent } from '../shared/shared.module';
 
 @Component({
     selector: 'app-courses',
@@ -15,14 +15,14 @@ export class CoursesComponent implements OnInit {
     public sort_tag = ['none', 'asc', 'dsc'];
     public sort_index = 0;
 
-    public semesters: Array < any > = [];
-    public programs: Array < any > = [];
-    public classes: Array < any > = [];
+    public semesters: Array<any> = [];
+    public programs: Array<any> = [];
+    public classes: Array<any> = [];
 
-    public current_courses: Array < any > = [];
+    public current_courses: Array<any> = [];
     public selectedSemester: any;
     public selectedProgram: any;
-    public filteredClasses: Array < any > ;
+    public filteredClasses: Array<any>;
     public selectedClasses: any;
     public searchText: string;
     public pageNumber: number = 1;
@@ -31,17 +31,17 @@ export class CoursesComponent implements OnInit {
     public totalItems: number = 0;
     public itemsPerPage: number = 10;
 
-    public newCourseName :string = ""; newCourseCode :string = ""; newCourseLecturer:string = "" ; newCourseTA:string = "";
-    
+    public newCourseName: string = ""; newCourseCode: string = ""; newCourseLecturer: string = ""; newCourseTA: string = "";
 
-    public constructor(public appService: AppService, public courseService: CourseService, public router: Router) {}
+
+    public constructor(public appService: AppService, public courseService: CourseService, public router: Router) { }
     public getCourseList() {
-        this.courseService.getCourseLists(this.selectedProgram, this.selectedClasses,this.selectedSemester,this.searchText, this.sort_tag[this.sort_index], this.pageNumber, this.itemsPerPage)
+        this.courseService.getCourseLists(this.selectedProgram, this.selectedClasses, this.selectedSemester, this.searchText, this.sort_tag[this.sort_index], this.pageNumber, this.itemsPerPage)
             .subscribe(result => {
                 this.current_courses = result.courses;
                 this.totalItems = result.total_items;
                 this.apiCallResult = result.result;
-            }, error => { this.appService.showPNotify('failure', "Server Error! Can't get course list", 'error');  });
+            }, error => { this.appService.showPNotify('failure', "Server Error! Can't get course list", 'error'); });
     }
 
     public onChangeProgram() {
@@ -76,20 +76,20 @@ export class CoursesComponent implements OnInit {
     public onAddCourse() {
         this.router.navigate(['/courses/add']);
     }
-    
-    @ViewChild(ImportModalComponent)
-    public  importModal: ImportModalComponent;
-    public onImportCourse(){
+
+    @ViewChild(ImportModalComponent, { static: true })
+    public importModal: ImportModalComponent;
+    public onImportCourse() {
         this.importModal.onOpenModal();
     }
-    public onCloseImport(event : any){
+    public onCloseImport(event: any) {
         this.getCourseList();
     }
 
-    @ViewChild(ExportModalComponent)
-    public  exportModal: ExportModalComponent;
-    public export_search_data : any = {};
-    public onExportCourse(){
+    @ViewChild(ExportModalComponent, { static: true })
+    public exportModal: ExportModalComponent;
+    public export_search_data: any = {};
+    public onExportCourse() {
         this.export_search_data = {};
         this.export_search_data['program_id'] = this.selectedProgram;
         this.export_search_data['class_id'] = this.selectedClasses;

@@ -4,13 +4,16 @@ import { Observable } from 'rxjs';
 import { AppConfig } from '../config'
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
+import 'rxjs/add/operator/map'
+
+import 'rxjs/Rx';
 @Injectable()
 export class ClassesService {
     // Resolve HTTP using the constructor
-    constructor(public  http: Http, public  appConfig: AppConfig,public  authService: AuthService,public  router :Router) {}
+    constructor(public http: Http, public appConfig: AppConfig, public authService: AuthService, public router: Router) { }
 
     public getClassListsUrl = this.appConfig.apiHost + '/class/list';
-    public getClassList(program_id: number,searchText: string = null, sort: string = 'none', page: number = 1, limit: number = -1): Observable < { result: string, total_items: number, classes: Array < any >, message:string } > {
+    public getClassList(program_id: number, searchText: string = null, sort: string = 'none', page: number = 1, limit: number = -1): Observable<{ result: string, total_items: number, classes: Array<any>, message: string }> {
         var params = {
             'searchText': searchText,
             'page': page,
@@ -36,7 +39,7 @@ export class ClassesService {
     }
 
     public addClassUrl = this.appConfig.apiHost + '/class/create';
-    public addClass(name, email, program_id, student_list: Array < any > = []): Observable < { result: string, message: string } > {
+    public addClass(name, email, program_id, student_list: Array<any> = []): Observable<{ result: string, message: string }> {
         var params = {
             'name': name,
             'email': email,

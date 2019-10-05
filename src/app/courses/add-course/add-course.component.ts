@@ -1,4 +1,4 @@
-import { Component, OnInit, Input,ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { CourseService, TeacherService, AppService, ExcelService, EditScheduleModalComponent, ResultMessageModalComponent } from '../../shared/shared.module';
 import { FileUploader } from "ng2-file-upload/ng2-file-upload";
@@ -11,13 +11,13 @@ declare var jQuery: any;
 })
 export class AddCourseComponent implements OnInit {
 
-    public constructor( public router: Router, public excelService: ExcelService, public appService: AppService,
+    public constructor(public router: Router, public excelService: ExcelService, public appService: AppService,
         public courseService: CourseService, public teacherService: TeacherService) {
 
     }
     public apiResult: string;
     public apiResultMessage: string;
-    @ViewChild(ResultMessageModalComponent)
+    @ViewChild(ResultMessageModalComponent, { static: true })
     public resultMessageModal: ResultMessageModalComponent;
 
     public onChangeProgram() {
@@ -46,12 +46,12 @@ export class AddCourseComponent implements OnInit {
     }
 
     public searchText: string = '';
-    public teachers: Array < any > = [];
-    public filtered_teachers: Array < any > = [];
-    public selected_lecturers: Array < any > = [];
-    public temp_lecturers: Array < any > = [];
-    public selected_TAs: Array < any > = [];
-    public temp_TAs: Array < any > = [];
+    public teachers: Array<any> = [];
+    public filtered_teachers: Array<any> = [];
+    public selected_lecturers: Array<any> = [];
+    public temp_lecturers: Array<any> = [];
+    public selected_TAs: Array<any> = [];
+    public temp_TAs: Array<any> = [];
 
     public code = '';
     public name = '';
@@ -63,9 +63,9 @@ export class AddCourseComponent implements OnInit {
     }
 
     public isContinue = false;
-    public addCourse(){
+    public addCourse() {
         this.courseService.addCourse(this.code, this.name, this.selected_lecturers, this.selected_TAs, this.office_hour, this.note,
-                this.selectedProgram, this.selectedClasses)
+            this.selectedProgram, this.selectedClasses)
             .subscribe(result => {
                 this.apiResult = result.result;
                 this.apiResultMessage = result.message;
@@ -81,26 +81,26 @@ export class AddCourseComponent implements OnInit {
                 }
                 jQuery("#progressModal").modal("hide");
                 //this.resultMessageModal.onOpenModal();
-                this.appService.showPNotify(this.apiResult,this.apiResultMessage,this.apiResult == 'success' ? 'success' : 'error');
+                this.appService.showPNotify(this.apiResult, this.apiResultMessage, this.apiResult == 'success' ? 'success' : 'error');
             }, error => {
                 this.apiResult = 'failure';
                 this.apiResultMessage = error;
                 console.log(error);
                 jQuery("#progressModal").modal("hide");
                 //this.resultMessageModal.onOpenModal();
-                this.appService.showPNotify(this.apiResult,this.apiResultMessage,this.apiResult == 'success' ? 'success' : 'error');
+                this.appService.showPNotify(this.apiResult, this.apiResultMessage, this.apiResult == 'success' ? 'success' : 'error');
             });
     }
-    public loopReadStudentFile(index: any){
-        if(this.selectedClasses[index].addStudentFromFile == ''){
-            if(index < this.selectedClasses.length-1){
-                this.loopReadStudentFile(index+1);
-            }else{
+    public loopReadStudentFile(index: any) {
+        if (this.selectedClasses[index].addStudentFromFile == '') {
+            if (index < this.selectedClasses.length - 1) {
+                this.loopReadStudentFile(index + 1);
+            } else {
                 this.addCourse();
                 return;
             }
         }
-        else{
+        else {
             this.excelService.readStudentListFile(this.selectedClasses[index].addStudentFromFile).subscribe(result => {
                 this.apiResult = result.result;
                 if (this.apiResult == 'failure') {
@@ -109,9 +109,9 @@ export class AddCourseComponent implements OnInit {
                 }
                 if (this.apiResult == 'success') {
                     this.selectedClasses[index].studentListFromFile = result.student_list.slice();
-                    if(index < this.selectedClasses.length-1){
-                        this.loopReadStudentFile(index+1);
-                    }else{
+                    if (index < this.selectedClasses.length - 1) {
+                        this.loopReadStudentFile(index + 1);
+                    } else {
                         this.addCourse();
                         return;
                     }
@@ -223,13 +223,13 @@ export class AddCourseComponent implements OnInit {
 
 
     //Class
-    public programs: Array < any > = [];
+    public programs: Array<any> = [];
     public selectedProgram: any;
-    public classes: Array < any > ;
-    public filteredClasses: Array < any > ;
+    public classes: Array<any>;
+    public filteredClasses: Array<any>;
     public isAddStudentFromCLass: boolean = true;
     public isAddStudentFromFile: boolean = false;
-    public selectedClasses: Array < any > = [{
+    public selectedClasses: Array<any> = [{
         classId: 0,
         class_name: '',
         schedule: '',
@@ -248,7 +248,7 @@ export class AddCourseComponent implements OnInit {
         this.selectedClasses.push({
             classId: 0,
             class_name: '',
-            schedule : '',
+            schedule: '',
             isAddStudentFromCLass: false,
             addStudentFromFile: '',
             studentListFromFile: [],
@@ -267,35 +267,35 @@ export class AddCourseComponent implements OnInit {
     }
 
     //Schedule
-    @ViewChild(EditScheduleModalComponent)
+    @ViewChild(EditScheduleModalComponent, { static: true })
     public editScheduleModal: EditScheduleModalComponent;
 
-    public scheduleModal ={
-        id : 'chooseScheduleModal',
-        title : 'Add Schedule'
+    public scheduleModal = {
+        id: 'chooseScheduleModal',
+        title: 'Add Schedule'
     }
     public onOpenChooseSchedule() {
-        for(var i = 0 ; i < this.selectedClasses.length; i++){
-            if(this.selectedClasses[i].classId == 0){
+        for (var i = 0; i < this.selectedClasses.length; i++) {
+            if (this.selectedClasses[i].classId == 0) {
                 this.apiResult = 'failure';
                 this.apiResultMessage = 'Class is required';
                 //this.resultMessageModal.onOpenModal();
-                this.appService.showPNotify(this.apiResult,this.apiResultMessage,this.apiResult == 'success' ? 'success' : 'error');
+                this.appService.showPNotify(this.apiResult, this.apiResultMessage, this.apiResult == 'success' ? 'success' : 'error');
                 return;
             }
-            for(var j = i + 1 ; j < this.selectedClasses.length; j++){
-                if(this.selectedClasses[i].classId == this.selectedClasses[j].classId){
+            for (var j = i + 1; j < this.selectedClasses.length; j++) {
+                if (this.selectedClasses[i].classId == this.selectedClasses[j].classId) {
                     this.apiResult = 'failure';
                     this.apiResultMessage = 'Cannot select the same class';
                     //this.resultMessageModal.onOpenModal();
-                    this.appService.showPNotify(this.apiResult,this.apiResultMessage,this.apiResult == 'success' ? 'success' : 'error');
+                    this.appService.showPNotify(this.apiResult, this.apiResultMessage, this.apiResult == 'success' ? 'success' : 'error');
                     return;
                 }
             }
         }
-        for(var i = 0 ; i < this.selectedClasses.length; i++){
-            for(var j = 0 ; j < this.classes.length ; j++){
-                if(this.selectedClasses[i].classId == this.classes[j].id){
+        for (var i = 0; i < this.selectedClasses.length; i++) {
+            for (var j = 0; j < this.classes.length; j++) {
+                if (this.selectedClasses[i].classId == this.classes[j].id) {
                     this.selectedClasses[i].class_name = this.classes[j].name;
                     break;
                 }
@@ -303,8 +303,8 @@ export class AddCourseComponent implements OnInit {
         }
         this.editScheduleModal.onOpenModal();
     }
-    public onSaveChooseSchedule(schedule : Array<string>) {
-        for(var i = 0 ; i < schedule.length; i++){
+    public onSaveChooseSchedule(schedule: Array<string>) {
+        for (var i = 0; i < schedule.length; i++) {
             this.selectedClasses[i].schedule = schedule[i];
         }
     }

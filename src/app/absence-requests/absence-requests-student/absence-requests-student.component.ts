@@ -8,7 +8,7 @@ declare var jQuery: any;
 })
 export class AbsenceRequestsStudentComponent implements OnInit {
 
-    public constructor(public router: Router, public absenceRequestService: AbsenceRequestService, public appService: AppService, public authService: AuthService) {}
+    public constructor(public router: Router, public absenceRequestService: AbsenceRequestService, public appService: AppService, public authService: AuthService) { }
 
     public ngOnInit(): void {
         this.getAbsenceRequests();
@@ -28,7 +28,7 @@ export class AbsenceRequestsStudentComponent implements OnInit {
     public getAbsenceRequests() {
         this.absenceRequestService.getRequestsByStudent(this.authService.current_user.id, this.selectedStatus, this.search_text).subscribe(result => {
             this.absence_requests = result.absence_requests;
-        }, error => { this.appService.showPNotify('failure', "Server Error! Can't get absence requests", 'error');  });
+        }, error => { this.appService.showPNotify('failure', "Server Error! Can't get absence requests", 'error'); });
     }
     public onChangeStatus() {
         this.getAbsenceRequests();
@@ -43,13 +43,13 @@ export class AbsenceRequestsStudentComponent implements OnInit {
     }
 
 
-    @ViewChild(CreateAbsenceRequestModalComponent)
+    @ViewChild(CreateAbsenceRequestModalComponent, { static: true })
     public createAbsenceRequestModal: CreateAbsenceRequestModalComponent;
     public onCreateRequest() {
         this.createAbsenceRequestModal.onOpenModal();
     }
-    public onRequestCreated(result:string){
-        if(result == 'success'){
+    public onRequestCreated(result: string) {
+        if (result == 'success') {
             this.getAbsenceRequests();
         }
     }
@@ -63,7 +63,7 @@ export class AbsenceRequestsStudentComponent implements OnInit {
                     jQuery('#confirmModal').modal("hide");
                     this.getAbsenceRequests();
                 }
-            }, error => { this.appService.showPNotify('failure', "Server Error! Can't cancel request", 'error');  });
+            }, error => { this.appService.showPNotify('failure', "Server Error! Can't cancel request", 'error'); });
     }
     public onSearchChange() {
         if (this.search_text.length > 3 || this.search_text.length == 0) {

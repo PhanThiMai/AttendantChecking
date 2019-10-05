@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { CourseService, StudentService, AttendanceService, AppService, EditScheduleModalComponent,
- ScheduleService, ResultMessageModalComponent, AuthService, ExcelService, ImportModalComponent } from '../../../shared/shared.module';
+import {
+    CourseService, StudentService, AttendanceService, AppService, EditScheduleModalComponent,
+    ScheduleService, ResultMessageModalComponent, AuthService, ExcelService, ImportModalComponent
+} from '../../../shared/shared.module';
 declare let jQuery: any;
 @Component({
     selector: 'course-detail-staff',
@@ -11,10 +13,10 @@ export class CourseDetailStaffComponent implements OnInit {
     public schedules = [];
     public course_not_found = false;
     public course_id: any;
-    public course: Array < any > = [];
-    public lecturers: Array < any > = [];
-    public TAs: Array < any > = [];
-    public class_has_course: Array < any > = [{
+    public course: Array<any> = [];
+    public lecturers: Array<any> = [];
+    public TAs: Array<any> = [];
+    public class_has_course: Array<any> = [{
         classId: 0,
         class_name: '',
         schedule: '',
@@ -22,20 +24,20 @@ export class CourseDetailStaffComponent implements OnInit {
         addStudentFromFile: '',
         studentListFromFile: [],
     }];
-    public attendance_lists: Array < any > = [];
-    public attendance_list: Array < any > = [];
+    public attendance_lists: Array<any> = [];
+    public attendance_list: Array<any> = [];
     public apiResult: string;
     public apiResultMessage: string;
-    @ViewChild(ResultMessageModalComponent)
-    public  resultMessageModal: ResultMessageModalComponent;
+    @ViewChild(ResultMessageModalComponent, { static: true })
+    public resultMessageModal: ResultMessageModalComponent;
 
-    public constructor(public route: ActivatedRoute, public studentService: StudentService, public  router: Router,
-        public  appService: AppService, public  courseService: CourseService, public  attendanceService: AttendanceService,
-         public  scheduleService: ScheduleService, public authService: AuthService,public excelService: ExcelService) {}
+    public constructor(public route: ActivatedRoute, public studentService: StudentService, public router: Router,
+        public appService: AppService, public courseService: CourseService, public attendanceService: AttendanceService,
+        public scheduleService: ScheduleService, public authService: AuthService, public excelService: ExcelService) { }
 
     public getAttendanceList() {
         var classes_id: Array<number> = [];
-        for(var i = 0 ; i < this.class_has_course.length; i++) {
+        for (var i = 0; i < this.class_has_course.length; i++) {
             classes_id.push(this.class_has_course[i].class_id);
         }
         this.attendanceService.getAttendanceListByCourse(this.course_id, classes_id).subscribe(result => {
@@ -56,7 +58,7 @@ export class CourseDetailStaffComponent implements OnInit {
             this.class_has_course = result.class_has_course;
             if (this.course === undefined || this.course == null) {
                 this.course_not_found = true;
-            }else {
+            } else {
                 // get student list
                 this.getAttendanceList();
             }
@@ -68,14 +70,14 @@ export class CourseDetailStaffComponent implements OnInit {
     }
 
     //Schedule
-    @ViewChild(EditScheduleModalComponent)
-    public  editScheduleModal: EditScheduleModalComponent;
+    @ViewChild(EditScheduleModalComponent, { static: true })
+    public editScheduleModal: EditScheduleModalComponent;
 
     public scheduleModal = {
         id: 'scheduleModal',
         title: 'Schedule'
     }
-    public onSaveSchedule(schedule: Array < string > ) {
+    public onSaveSchedule(schedule: Array<string>) {
         //this.course.schedule = schedule;
         for (var i = 0; i < this.class_has_course.length; i++) {
             this.class_has_course[i].schedules = schedule[i];
@@ -84,21 +86,21 @@ export class CourseDetailStaffComponent implements OnInit {
             this.apiResult = result.result;
             this.apiResultMessage = result.message;
             //this.resultMessageModal.onOpenModal();
-            this.appService.showPNotify(this.apiResult,this.apiResultMessage,this.apiResult == 'success' ? 'success' : 'error');
-        }, error => { this.appService.showPNotify('failure',"Server Error! Can't save schedule",'error');});
+            this.appService.showPNotify(this.apiResult, this.apiResultMessage, this.apiResult == 'success' ? 'success' : 'error');
+        }, error => { this.appService.showPNotify('failure', "Server Error! Can't save schedule", 'error'); });
     }
     public onOpenSchedule() {
         this.editScheduleModal.onOpenModal();
     }
 
     public isEdittingAttendance = false;
-    public temp_attendance_lists: Array < any > = [];
+    public temp_attendance_lists: Array<any> = [];
     public selected_class_index = 0;
-    public onChangeClass(index){
+    public onChangeClass(index) {
         this.selected_class_index = index;
         this.attendance_list = this.attendance_lists[index];
-        for(var i = 0; i < this.attendance_list.length;i++){
-            for(var j = 0 ; j < this.attendance_list[i].attendance_details.length; j++){
+        for (var i = 0; i < this.attendance_list.length; i++) {
+            for (var j = 0; j < this.attendance_list[i].attendance_details.length; j++) {
                 switch (this.attendance_list[i].attendance_details[j].attendance_type) {
                     case this.appService.attendance_type.checklist:
                         this.attendance_list[i].attendance_details[j]['icon'] = 'fa-check';
@@ -115,7 +117,7 @@ export class CourseDetailStaffComponent implements OnInit {
                     case this.appService.attendance_type.permited_absent:
                         this.attendance_list[i].attendance_details[j]['icon'] = 'fa-envelope-square';
                         this.attendance_list[i].attendance_details[j]['method'] = 'Permited Absent';
-                        break;        
+                        break;
                     default:
                         this.attendance_list[i].attendance_details[j]['icon'] = '';
                         this.attendance_list[i].attendance_details[j]['method'] = 'Absent';
@@ -129,7 +131,7 @@ export class CourseDetailStaffComponent implements OnInit {
         if (isTempDes) {
             console.log('Temp_attendance_lists is destroyed, Cloning attendance lists');
             this.temp_attendance_lists = [];
-            for(var k = 0 ; k < this.attendance_lists.length; k++) {
+            for (var k = 0; k < this.attendance_lists.length; k++) {
                 var temp_attendance_list = [];
                 for (var i = 0; i < this.attendance_lists[k].length; i++) {
                     var attendance = {
@@ -202,27 +204,27 @@ export class CourseDetailStaffComponent implements OnInit {
         // this.cloneAttendanceList(false); // Push temp_lists back to attendance_lists
         console.log('onSaveEditAttendanceClick');
         let classes_id: Array<number> = [];
-        for (let i = 0 ; i < this.class_has_course.length; i++) {
+        for (let i = 0; i < this.class_has_course.length; i++) {
             classes_id.push(this.class_has_course[i].class_id);
         }
         this.attendanceService.updateAttendanceListByCourse(this.course_id, classes_id, this.temp_attendance_lists)
-        .subscribe(results => {
-            if (results.result === 'success') {
-                this.cloneAttendanceList(false);
-                this.onChangeClass(this.selected_class_index);
-                this.isEdittingAttendance = false;
-                console.log('Save successfully');
-            }else {
-                // this.cloneAttendanceList(true);
-                // this.onChangeClass(this.selected_class_index);
-                // this.isEdittingAttendance = true;
-                console.log('Save failed');
-            }
-            this.apiResult = results.result;
-            this.apiResultMessage = results.message;
-            this.resultMessageModal.onOpenModal();
-            this.appService.showPNotify(this.apiResult, this.apiResultMessage,this.apiResult === 'success' ? 'success' : 'error');
-        }, error => {this.appService.showPNotify('failure', 'Server Error! Can\'t get save attendance', 'error'); });
+            .subscribe(results => {
+                if (results.result === 'success') {
+                    this.cloneAttendanceList(false);
+                    this.onChangeClass(this.selected_class_index);
+                    this.isEdittingAttendance = false;
+                    console.log('Save successfully');
+                } else {
+                    // this.cloneAttendanceList(true);
+                    // this.onChangeClass(this.selected_class_index);
+                    // this.isEdittingAttendance = true;
+                    console.log('Save failed');
+                }
+                this.apiResult = results.result;
+                this.apiResultMessage = results.message;
+                this.resultMessageModal.onOpenModal();
+                this.appService.showPNotify(this.apiResult, this.apiResultMessage, this.apiResult === 'success' ? 'success' : 'error');
+            }, error => { this.appService.showPNotify('failure', 'Server Error! Can\'t get save attendance', 'error'); });
     }
 
     public edit_attendance_reason = '';
@@ -235,8 +237,8 @@ export class CourseDetailStaffComponent implements OnInit {
     }
     public confirmChangeAttendanceDetail() {
         if (this.edit_attendance_reason === '') {
-            this.appService.showPNotify('failure',"Error! Reason is required to change attendance detail",'error'); 
-        }else {
+            this.appService.showPNotify('failure', "Error! Reason is required to change attendance detail", 'error');
+        } else {
             if (this.temp_attendance_lists[this.selected_class_index][this.current_attendance_index].attendance_details[this.current_attendance_detail_index].attendance_type) {
                 this.temp_attendance_lists[this.selected_class_index][this.current_attendance_index].attendance_details[this.current_attendance_detail_index].attendance_type = this.appService.attendance_type.absent;
                 this.temp_attendance_lists[this.selected_class_index][this.current_attendance_index].attendance_details[this.current_attendance_detail_index].icon = '';
@@ -257,20 +259,20 @@ export class CourseDetailStaffComponent implements OnInit {
     public new_code: string = '';
     public new_name: string = '';
     public keyDownFunction(event) {
-      if (event.keyCode === 13) {
-        this.onAddToAttendanceList();
-      }
+        if (event.keyCode === 13) {
+            this.onAddToAttendanceList();
+        }
     }
-    public getSearchingStudentDetail(){
-        if(this.new_code.length > 6){
-            this.studentService.getStudentDetailByCode(this.new_code).subscribe(result=>{
-                if(result.result == 'success'){
+    public getSearchingStudentDetail() {
+        if (this.new_code.length > 6) {
+            this.studentService.getStudentDetailByCode(this.new_code).subscribe(result => {
+                if (result.result == 'success') {
                     this.new_name = result.student.first_name + ' ' + result.student.last_name;
                 }
-                else{
+                else {
                     this.new_name = '';
                 }
-            },error =>{console.log(error)});
+            }, error => { console.log(error) });
         }
     }
     public onAddToAttendanceList() {
@@ -291,21 +293,21 @@ export class CourseDetailStaffComponent implements OnInit {
                         created_at: this.attendance_lists[this.selected_class_index][0].attendance_details[j].created_at,
                         edited_by: null,
                         edited_reason: null,
-                        icon : '',
-                        method : 'Absent'
+                        icon: '',
+                        method: 'Absent'
                     };
                     attendance.attendance_details.push(attendance_detail);
                 }
                 this.temp_attendance_lists[this.selected_class_index].push(attendance);
                 this.new_name = '';
                 this.new_code = '';
-            }else {
+            } else {
                 this.apiResult = results.result;
                 this.apiResultMessage = results.message;
                 // this.resultMessageModal.onOpenModal();
                 this.appService.showPNotify(this.apiResult, this.apiResultMessage, this.apiResult === 'success' ? 'success' : 'error');
             }
-        }, error => {this.appService.showPNotify('failure', 'Server Error! Can\'t check student', 'error'); });
+        }, error => { this.appService.showPNotify('failure', 'Server Error! Can\'t check student', 'error'); });
     }
 
     public delete_student_index = 0;
@@ -341,24 +343,24 @@ export class CourseDetailStaffComponent implements OnInit {
     }
 
     public import_title;
-    @ViewChild(ImportModalComponent)
-    public  importModal: ImportModalComponent;
-    public onCloseImport(attendance_list : any){
-        if(attendance_list == 'close'){
+    @ViewChild(ImportModalComponent, { static: true })
+    public importModal: ImportModalComponent;
+    public onCloseImport(attendance_list: any) {
+        if (attendance_list == 'close') {
             return;
         }
         const temp_attendance_list = this.temp_attendance_lists[this.selected_class_index];
-        for(let i = 0 ; i < attendance_list.length; i++){
+        for (let i = 0; i < attendance_list.length; i++) {
             let check_new_student = true;
-            for(let j = 0 ; j < temp_attendance_list.length; j++){
-                if(attendance_list[i].code.toString() === temp_attendance_list[j].code.toString()){
+            for (let j = 0; j < temp_attendance_list.length; j++) {
+                if (attendance_list[i].code.toString() === temp_attendance_list[j].code.toString()) {
                     let length = 0;
-                    if (attendance_list[i].attendance_details.length < temp_attendance_list[j].attendance_details.length){
+                    if (attendance_list[i].attendance_details.length < temp_attendance_list[j].attendance_details.length) {
                         length = attendance_list[i].attendance_details.length;
-                    }else{
+                    } else {
                         length = temp_attendance_list[j].attendance_details.length;
                     }
-                    for (let k = 0 ; k < length; k++){
+                    for (let k = 0; k < length; k++) {
                         temp_attendance_list[j].attendance_details[k].attendance_type = attendance_list[i].attendance_details[k].attendance_type;
                         temp_attendance_list[j].attendance_details[k].attendance_time = new Date();
                         temp_attendance_list[j].attendance_details[k].icon = attendance_list[i].attendance_details[k].icon;
@@ -368,19 +370,19 @@ export class CourseDetailStaffComponent implements OnInit {
                     break;
                 }
             }
-            if (check_new_student){
+            if (check_new_student) {
                 const attendance = {
                     id: 0,
                     code: attendance_list[i].code,
                     name: attendance_list[i].name,
-                    exemption : attendance_list[i].exemption,
+                    exemption: attendance_list[i].exemption,
                     attendance_details: []
                 };
-                if (temp_attendance_list.length > 0 && temp_attendance_list[0].attendance_details.length > 0){
+                if (temp_attendance_list.length > 0 && temp_attendance_list[0].attendance_details.length > 0) {
                     let length = 0;
-                    if (attendance_list[i].attendance_details.length < temp_attendance_list[0].attendance_details.length){
+                    if (attendance_list[i].attendance_details.length < temp_attendance_list[0].attendance_details.length) {
                         length = attendance_list[i].attendance_details.length;
-                    }else{
+                    } else {
                         length = temp_attendance_list[0].attendance_details.length;
                     }
                     for (let j = 0; j < length; j++) {
@@ -402,20 +404,20 @@ export class CourseDetailStaffComponent implements OnInit {
             }
         }
     }
-    public onImportAttendanceList(){
+    public onImportAttendanceList() {
         this.import_title = 'Load Attendance List For' + this.class_has_course[this.selected_class_index].class_name;
         this.importModal.onOpenModal();
     }
 
-    public onExportAttendanceList(){
+    public onExportAttendanceList() {
         let lecturers = '';
-        for (let i = 0; i < this.lecturers.length; i++){
+        for (let i = 0; i < this.lecturers.length; i++) {
             lecturers += this.lecturers[i].first_name + ' ' + this.lecturers[i].last_name + '\r\n';
         }
         this.excelService.writeAttendanceList(
             this.attendance_list,
             this.course['code'] + ' - ' + this.course['name'] + ' - ' + this.class_has_course[this.selected_class_index].class_name + ' (' + this.course['semester_name'] + ')',
             lecturers
-            );
+        );
     }
 }

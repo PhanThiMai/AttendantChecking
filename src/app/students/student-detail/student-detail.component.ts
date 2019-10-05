@@ -1,6 +1,6 @@
 import { Component, ChangeDetectorRef, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { StudentService, AppService, AbsenceRequestService,ResultMessageModalComponent, AuthService } from '../../shared/shared.module';
+import { StudentService, AppService, AbsenceRequestService, ResultMessageModalComponent, AuthService } from '../../shared/shared.module';
 declare var jQuery: any;
 @Component({
     selector: 'students-detail',
@@ -10,11 +10,11 @@ export class StudentDetailComponent implements OnInit {
 
     public student_id: number;
     public student_not_found = false;
-    public constructor(public  route: ActivatedRoute, public  router: Router, public  studentService: StudentService,public  authService: AuthService, public  appService: AppService, public  absenceRequestService: AbsenceRequestService) {
+    public constructor(public route: ActivatedRoute, public router: Router, public studentService: StudentService, public authService: AuthService, public appService: AppService, public absenceRequestService: AbsenceRequestService) {
 
     }
-    @ViewChild(ResultMessageModalComponent)
-    public  resultMessageModal: ResultMessageModalComponent;
+    @ViewChild(ResultMessageModalComponent, { static: true })
+    public resultMessageModal: ResultMessageModalComponent;
     public isEditingStudent = false;
     public student = {
         id: 0,
@@ -36,19 +36,19 @@ export class StudentDetailComponent implements OnInit {
         //get Student from database
         this.getStudentrDetail();
     }
-    public getStudentrDetail(){
+    public getStudentrDetail() {
         this.studentService.getStudentrDetail(this.student_id).subscribe(result => {
             this.student = result.student;
-            if(this.student == undefined || this.student==null){
-                this.student_not_found =true;
+            if (this.student == undefined || this.student == null) {
+                this.student_not_found = true;
                 return;
             }
             this.current_courses = result.current_courses;
             this.editing_name = this.student.first_name + ' ' + this.student.last_name;
-            this.absenceRequestService.getRequestsByStudent(this.student_id,-1,'')
-            .subscribe(result => {
-                this.absence_requests = result.absence_requests;
-            }, error => { this.appService.showPNotify('failure', "Server Error! Can't get absence requests by student", 'error'); });
+            this.absenceRequestService.getRequestsByStudent(this.student_id, -1, '')
+                .subscribe(result => {
+                    this.absence_requests = result.absence_requests;
+                }, error => { this.appService.showPNotify('failure', "Server Error! Can't get absence requests by student", 'error'); });
         }, error => { this.appService.showPNotify('failure', "Server Error! Can't student detail", 'error'); });
     }
     public onCourseClick(id: number) {
@@ -79,7 +79,7 @@ export class StudentDetailComponent implements OnInit {
     public confirmAction() {
         this.absenceRequestService.changeRequestStatus(this.current_request_id, this.current_request_status)
             .subscribe(result => {
-                this.absenceRequestService.getRequestsByStudent(this.student_id,-1,'')
+                this.absenceRequestService.getRequestsByStudent(this.student_id, -1, '')
                     .subscribe(result => {
                         this.absence_requests = result.absence_requests;
                         jQuery('#confirmModal').modal("hide");
@@ -114,30 +114,30 @@ export class StudentDetailComponent implements OnInit {
                     this.student.status = this.editing_status;
                 }
                 //this.resultMessageModal.onOpenModal();
-                this.appService.showPNotify(this.apiResult,this.apiResultMessage,this.apiResult == 'success' ? 'success' : 'error');
+                this.appService.showPNotify(this.apiResult, this.apiResultMessage, this.apiResult == 'success' ? 'success' : 'error');
             }, error => { this.appService.showPNotify('failure', "Server Error! Can't update profile", 'error'); });
     }
 
     public current_attendance_status = 0;
-    public onChangeAttendanceStatus(course_id, status){
+    public onChangeAttendanceStatus(course_id, status) {
         jQuery('#confirmChangeAttendanceStatusModal').modal("show");
-        if(this.appService.attendance_status.exemption == status){
+        if (this.appService.attendance_status.exemption == status) {
             this.confirm_modal_title = 'Change attendance status to Exemption?';
-        }else{
+        } else {
             this.confirm_modal_title = 'Change attendance status to Normal?';
         }
         this.current_attendance_status = status;
         this.current_course_id = course_id;
     }
-    public confirmChangeAttendanceStatus(){
-        this.studentService.changeAttendanceStatus(this.student_id,this.current_course_id,this.student.class_id,this.current_attendance_status).subscribe(result=>{
+    public confirmChangeAttendanceStatus() {
+        this.studentService.changeAttendanceStatus(this.student_id, this.current_course_id, this.student.class_id, this.current_attendance_status).subscribe(result => {
             this.apiResult = result.result;
             this.apiResultMessage = result.message;
             if (result.result == 'success') {
                 jQuery('#confirmChangeAttendanceStatusModal').modal("hide");
                 this.getStudentrDetail();
             }
-            this.appService.showPNotify(this.apiResult,this.apiResultMessage,this.apiResult == 'success' ? 'success' : 'error');
-        },error=>{this.appService.showPNotify('failure', "Server Error! Can't change attendance status", 'error');});
+            this.appService.showPNotify(this.apiResult, this.apiResultMessage, this.apiResult == 'success' ? 'success' : 'error');
+        }, error => { this.appService.showPNotify('failure', "Server Error! Can't change attendance status", 'error'); });
     }
 }

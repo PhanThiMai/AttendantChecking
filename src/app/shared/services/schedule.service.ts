@@ -4,12 +4,15 @@ import { Observable } from 'rxjs';
 import { AppConfig } from '../config';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
+import 'rxjs/add/operator/map'
+
+import 'rxjs/Rx';
 @Injectable()
 export class ScheduleService {
     // Resolve HTTP using the constructor
-    public constructor(public  http: Http,public  appConfig: AppConfig, public  authService: AuthService,public  router: Router) {}
-    public  updateScheduleUrl = this.appConfig.apiHost + '/schedule/update/';
-    public updateSchedule(classes : any): Observable < { result: string, message : string} > {
+    public constructor(public http: Http, public appConfig: AppConfig, public authService: AuthService, public router: Router) { }
+    public updateScheduleUrl = this.appConfig.apiHost + '/schedule/update/';
+    public updateSchedule(classes: any): Observable<{ result: string, message: string }> {
         var params = {
             'classes': classes
         };
@@ -17,7 +20,7 @@ export class ScheduleService {
         let headers = new Headers();
         headers.append('x-access-token', `${authToken}`);
         let options = new RequestOptions({ headers: headers });
-        return this.http.put(this.updateScheduleUrl,params,options)
+        return this.http.put(this.updateScheduleUrl, params, options)
             // ...and calling .json() on the response to return data
             .map((res: Response) => res.json())
             //...errors if any
@@ -29,8 +32,8 @@ export class ScheduleService {
                 return Observable.throw(error || 'Server error');
             });
     }
-    public  getSchedulesAndCoursesUrl = this.appConfig.apiHost + '/schedule/schedules-and-courses/';
-    public getSchedulesAndCourses(program_id:number, class_id : number, semester_id : number): Observable < { result: string, courses: Array<any> ,message : string} > {
+    public getSchedulesAndCoursesUrl = this.appConfig.apiHost + '/schedule/schedules-and-courses/';
+    public getSchedulesAndCourses(program_id: number, class_id: number, semester_id: number): Observable<{ result: string, courses: Array<any>, message: string }> {
         var params = {
             'program_id': program_id,
             'class_id': class_id,
@@ -40,7 +43,7 @@ export class ScheduleService {
         let headers = new Headers();
         headers.append('x-access-token', `${authToken}`);
         let options = new RequestOptions({ headers: headers });
-        return this.http.post(this.getSchedulesAndCoursesUrl,params,options)
+        return this.http.post(this.getSchedulesAndCoursesUrl, params, options)
             // ...and calling .json() on the response to return data
             .map((res: Response) => res.json())
             //...errors if any
@@ -52,13 +55,13 @@ export class ScheduleService {
                 return Observable.throw(error || 'Server error');
             });
     }
-    public  getSchedulesAndCoursesByStudentUrl = this.appConfig.apiHost + '/schedule/schedules-and-courses-by-student/';
-    public getSchedulesAndCoursesByStudent(semester_id : number): Observable < { result: string, courses: Array<any> ,message : string} > {
+    public getSchedulesAndCoursesByStudentUrl = this.appConfig.apiHost + '/schedule/schedules-and-courses-by-student/';
+    public getSchedulesAndCoursesByStudent(semester_id: number): Observable<{ result: string, courses: Array<any>, message: string }> {
         let authToken = this.authService.token;
         let headers = new Headers();
         headers.append('x-access-token', `${authToken}`);
         let options = new RequestOptions({ headers: headers });
-        return this.http.get(this.getSchedulesAndCoursesByStudentUrl,options)
+        return this.http.get(this.getSchedulesAndCoursesByStudentUrl, options)
             // ...and calling .json() on the response to return data
             .map((res: Response) => res.json())
             //...errors if any
@@ -70,13 +73,13 @@ export class ScheduleService {
                 return Observable.throw(error || 'Server error');
             });
     }
-    public  getSchedulesAndCoursesByTeacherUrl = this.appConfig.apiHost + '/schedule/schedules-and-courses-by-teacher/';
-    public getSchedulesAndCoursesByTeacher(semester_id : number): Observable < { result: string, courses: Array<any> ,message : string} > {
+    public getSchedulesAndCoursesByTeacherUrl = this.appConfig.apiHost + '/schedule/schedules-and-courses-by-teacher/';
+    public getSchedulesAndCoursesByTeacher(semester_id: number): Observable<{ result: string, courses: Array<any>, message: string }> {
         let authToken = this.authService.token;
         let headers = new Headers();
         headers.append('x-access-token', `${authToken}`);
         let options = new RequestOptions({ headers: headers });
-        return this.http.get(this.getSchedulesAndCoursesByTeacherUrl,options)
+        return this.http.get(this.getSchedulesAndCoursesByTeacherUrl, options)
             // ...and calling .json() on the response to return data
             .map((res: Response) => res.json())
             //...errors if any
@@ -90,16 +93,16 @@ export class ScheduleService {
     }
 
     public exportScheduleUrl = this.appConfig.apiHost + '/schedule/export/';
-    public exportSchedule(programs : any , classes : any): Observable < { result: string, schedules: Array<any> ,message : string} > {
+    public exportSchedule(programs: any, classes: any): Observable<{ result: string, schedules: Array<any>, message: string }> {
         let authToken = this.authService.token;
         let headers = new Headers();
         var params = {
             'programs': programs,
-            'classes' : classes
+            'classes': classes
         };
         headers.append('x-access-token', `${authToken}`);
         let options = new RequestOptions({ headers: headers });
-        return this.http.post(this.exportScheduleUrl,params,options)
+        return this.http.post(this.exportScheduleUrl, params, options)
             // ...and calling .json() on the response to return data
             .map((res: Response) => res.json())
             //...errors if any
@@ -113,7 +116,7 @@ export class ScheduleService {
     }
 
     public importScheduleUrl = this.appConfig.apiHost + '/schedule/import';
-    public importSchedule(schedule : any): Observable < { result: string ,message : string} > {
+    public importSchedule(schedule: any): Observable<{ result: string, message: string }> {
         let authToken = this.authService.token;
         let headers = new Headers();
         var params = {
@@ -121,7 +124,7 @@ export class ScheduleService {
         };
         headers.append('x-access-token', `${authToken}`);
         let options = new RequestOptions({ headers: headers });
-        return this.http.post(this.importScheduleUrl,params,options)
+        return this.http.post(this.importScheduleUrl, params, options)
             // ...and calling .json() on the response to return data
             .map((res: Response) => res.json())
             //...errors if any

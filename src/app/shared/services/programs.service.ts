@@ -4,13 +4,16 @@ import { Observable } from 'rxjs';
 import { AppConfig } from '../config'
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
+import 'rxjs/add/operator/map'
+
+import 'rxjs/Rx';
 @Injectable()
 export class ProgramsService {
     // Resolve HTTP using the constructor
-    constructor(public  http: Http, public  appConfig: AppConfig,public  authService: AuthService,public  router :Router) {}
+    constructor(public http: Http, public appConfig: AppConfig, public authService: AuthService, public router: Router) { }
 
     public getProgramListsUrl = this.appConfig.apiHost + '/program/list';
-    public getProgramList(searchText: string = null, sort: string = 'none', page: number = 1, limit: number = -1): Observable < { result: string, total_items: number, programs: Array < any >, message:string } > {
+    public getProgramList(searchText: string = null, sort: string = 'none', page: number = 1, limit: number = -1): Observable<{ result: string, total_items: number, programs: Array<any>, message: string }> {
         var params = {
             'searchText': searchText,
             'page': page,
@@ -34,9 +37,9 @@ export class ProgramsService {
             });
     }
 
-    
+
     public addProgramUrl = this.appConfig.apiHost + '/program/create';
-    public addProgram(name, code): Observable < { result: string, message: string } > {
+    public addProgram(name, code): Observable<{ result: string, message: string }> {
         var params = {
             'name': name,
             'code': code,
