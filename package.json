@@ -39,7 +39,7 @@
     "angular2-autosize": "^1.0.2",
     "angular2-qrcode": "^2.0.3",
     "angular2-text-mask": "^9.0.0",
-    "async": "^3.1.0",
+    "async": "^3.2.2",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
